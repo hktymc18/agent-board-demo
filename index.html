@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>フッキャリ 業務管理システムのご提案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Noto+Sans+JP:wght@500;700;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: フッキャリのサイトと同じ「ティールの帯／ミントの面／白カード＋黄色マーカー」を交互に積む縦長の提案書。中央1カラム、要所だけ2〜3列 */
+:root{
+  --brand:#0bb3ab; --brand-deep:#08918a; --brand-weak:#e2f4f3;
+  --yellow:#f7dd55; --yellow-soft:#fdf1a6; --marker:#fbef9f;
+  --bg:#ffffff; --mint:#eef7f6; --surface:#ffffff; --ink:#25333a; --muted:#566a6e; --line:#d2e3e1;
+  --accent:#07827c; --on-brand:#ffffff;
+  --good:#2e7a3a; --bad:#c0431b; --bad-weak:#fbe5dc;
+  --shadow:0 1px 2px rgba(20,60,58,.06),0 8px 22px rgba(20,90,86,.08);
+  --f-display:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --brand:#14bdb4; --brand-deep:#0b7f79; --brand-weak:#163432;
+  --yellow:#e2c845; --yellow-soft:#3f3a17; --marker:#554d1d;
+  --bg:#0f1716; --mint:#132120; --surface:#182423; --ink:#e3eeec; --muted:#97aaa7; --line:#283836;
+  --accent:#4fd2c9; --on-brand:#ffffff; --good:#73c27c; --bad:#f08460; --bad-weak:#3a1d13;
+  --shadow:0 1px 2px rgba(0,0,0,.35); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --brand:#14bdb4; --brand-deep:#0b7f79; --brand-weak:#163432;
+  --yellow:#e2c845; --yellow-soft:#3f3a17; --marker:#554d1d;
+  --bg:#0f1716; --mint:#132120; --surface:#182423; --ink:#e3eeec; --muted:#97aaa7; --line:#283836;
+  --accent:#4fd2c9; --on-brand:#ffffff; --good:#73c27c; --bad:#f08460; --bad-weak:#3a1d13;
+  --shadow:0 1px 2px rgba(0,0,0,.35); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.8;letter-spacing:.02em}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;margin:0;line-height:1.4;text-wrap:balance;letter-spacing:.05em}
+p{margin:0}
+a{color:var(--accent)}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.wrap{max-width:1040px;margin-inline:auto;padding-inline:20px}
+section{padding-block:64px}
+.band-mint{background:var(--mint)}
+.band-brand{background:var(--brand);color:var(--on-brand)}
+.mk{background:linear-gradient(transparent 60%,var(--marker) 60%);padding:0 2px}
+.sec-title{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:36px}
+.sec-title h2{font-size:clamp(22px,3.4vw,30px)}
+.sec-title::after{content:"";width:44px;height:4px;border-radius:2px;background:var(--brand)}
+.sec-title p{color:var(--muted);max-width:60ch}
+.eyebrow{font-family:var(--f-display);font-weight:900;font-size:13px;letter-spacing:.14em;color:var(--accent)}
+
+/* 表紙 */
+.strip{background:var(--yellow);color:#25333a;text-align:center;font-family:var(--f-display);font-weight:900;font-size:14px;letter-spacing:.1em;padding:8px 16px}
+.cover{background:var(--brand);color:var(--on-brand);padding-block:56px 72px;position:relative;overflow:hidden}
+.cover::before,.cover::after{content:"";position:absolute;border-radius:99px;background:rgba(255,255,255,.14);transform:rotate(-24deg)}
+.cover::before{width:320px;height:46px;right:-60px;top:40px}
+.cover::after{width:220px;height:30px;right:120px;top:120px}
+.cover .wrap{display:flex;flex-direction:column;gap:18px;position:relative}
+.balloon{align-self:flex-start;background:var(--yellow-soft);color:var(--accent);font-family:var(--f-display);font-weight:900;border-radius:99px;padding:5px 20px;position:relative}
+.balloon::after{content:"";position:absolute;left:40px;bottom:-8px;border:8px solid transparent;border-top-color:var(--yellow-soft);border-bottom:0}
+.cover h1{font-size:clamp(30px,6vw,56px);font-style:italic;letter-spacing:.04em;color:#fff}
+.cover .lead{font-size:16px;max-width:52ch;color:#fff}
+.cover .meta{font-size:13px;opacity:.9;color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:900;letter-spacing:.06em;border-radius:99px;padding:12px 26px;text-decoration:none;background:var(--surface);color:var(--accent);box-shadow:0 4px 0 var(--brand-deep);align-self:flex-start}
+.btn:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+
+/* 要約 */
+.summary{margin-top:-40px;position:relative}
+.sum-card{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:26px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:22px}
+.sum-item{display:flex;flex-direction:column;gap:4px}
+.sum-item .l{font-size:12px;color:var(--muted);font-weight:700}
+.sum-item .v{font-family:var(--f-num);font-size:32px;font-weight:600;line-height:1.2;color:var(--accent)}
+.sum-item .v small{font-family:var(--f-body);font-size:14px;color:var(--ink);margin-left:4px}
+.sum-item .s{font-size:12px;color:var(--muted)}
+
+/* 課題 */
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.card{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rib{align-self:flex-start;background:var(--yellow);color:#07625d;font-family:var(--f-display);font-weight:900;font-size:13px;letter-spacing:.06em;padding:3px 18px 3px 22px;margin:-22px 0 4px -22px;border-top-left-radius:18px;clip-path:polygon(0 0,100% 0,calc(100% - 9px) 50%,100% 100%,0 100%)}
+.card h3{font-size:18px}
+.card p{color:var(--muted);font-size:14px}
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.check li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:14px}
+.check li::before{content:"";width:20px;height:20px;border-radius:50%;background:var(--brand);margin-top:3px;-webkit-mask:radial-gradient(circle,#000 99%,transparent);}
+.check li{position:relative}
+.check li::after{content:"";position:absolute;left:6px;top:8px;width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+
+/* Before/After */
+.ba{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch}
+.ba .col{background:var(--surface);border-radius:18px;padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0}
+.ba .col h3{font-size:16px}
+.ba .before h3{color:var(--bad)}
+.ba .after{border:3px solid var(--brand)}
+.ba .after h3{color:var(--accent)}
+.ba .arrow{align-self:center;width:44px;height:44px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-weight:900;color:#25333a}
+.ba ul{margin:0;padding-left:1.2em;font-size:14px;display:flex;flex-direction:column;gap:6px}
+
+/* 連携図 */
+.flow{display:grid;grid-template-columns:1fr auto 1.2fr auto 1fr;gap:12px;align-items:center}
+.node{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.node h3{font-size:16px}
+.node.hub{border:3px solid var(--brand);background:var(--brand-weak)}
+.node .tag{align-self:flex-start;font-size:11px;font-weight:700;border-radius:99px;padding:1px 10px;background:var(--yellow-soft);color:var(--ink)}
+.node ul{margin:0;padding-left:1.1em;font-size:13px;color:var(--muted)}
+.link{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted);text-align:center}
+.link b{font-size:20px;color:var(--brand);line-height:1}
+
+/* 機能 */
+.feat{background:var(--surface);border-radius:16px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line)}
+.feat .stage{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.feat h3{font-size:16px}
+.feat p{font-size:13px;color:var(--muted)}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+
+/* 費用対効果 */
+.roi{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:22px;align-items:start}
+.inputs{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:12px}
+.inputs h3{font-size:16px}
+.inp{display:grid;grid-template-columns:1fr 122px;gap:8px;align-items:center;font-size:13px}
+.inp .box{white-space:nowrap}
+.inp label{font-weight:700}
+.inp label small{display:block;font-weight:400;color:var(--muted);font-size:11px;line-height:1.4}
+.inp .box{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)}
+.inp input{width:100%;font-family:var(--f-num);font-size:15px;text-align:right;padding:6px 8px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.inp input:focus{outline:2px solid var(--brand);border-color:var(--brand)}
+.grp{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--accent);border-top:1px dashed var(--line);padding-top:10px}
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px}
+.kpi{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:2px}
+.kpi .l{font-size:12px;font-weight:700;color:var(--muted)}
+.kpi .v{font-family:var(--f-num);font-size:28px;font-weight:600;line-height:1.25}
+.kpi .v small{font-family:var(--f-body);font-size:13px;color:var(--muted);margin-left:3px}
+.kpi .s{font-size:12px;color:var(--muted)}
+.kpi.hl{background:var(--brand);color:var(--on-brand)}
+.kpi.hl .l,.kpi.hl .s,.kpi.hl .v small{color:var(--on-brand);opacity:.92}
+.panel{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:20px 22px;min-width:0}
+.panel h3{font-size:16px;margin-bottom:12px}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 92px;gap:12px;align-items:center;font-size:13px}
+.bar-row .name{font-weight:700;line-height:1.4}
+.bar-row .name small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.track{position:relative;height:26px;display:flex;flex-direction:column;gap:3px}
+.track i{display:block;height:11px;border-radius:3px}
+.track .b{background:var(--line)}
+.track .a{background:var(--brand)}
+.bar-row .val{font-family:var(--f-num);font-size:12px;text-align:right;line-height:1.35}
+.bar-row .val b{color:var(--accent)}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:8px;border-radius:2px;display:inline-block}
+.payback{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.pb{border-radius:16px;padding:16px 18px;background:var(--mint);display:flex;flex-direction:column;gap:6px}
+.pb .t{font-weight:700;font-size:13px}
+.pb .v{font-family:var(--f-num);font-size:24px;font-weight:600;color:var(--accent)}
+.pb .s{font-size:12px;color:var(--muted)}
+.callout{background:var(--yellow-soft);border-radius:16px;padding:16px 20px;font-family:var(--f-display);font-weight:700;font-size:16px;line-height:1.7}
+.callout .num{font-weight:600;color:var(--accent)}
+.note{font-size:12px;color:var(--muted)}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--muted);white-space:nowrap}
+td.r,th.r{text-align:right}
+
+/* スケジュール */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px;counter-reset:s}
+.step{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:8px;position:relative}
+.step .no{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-family:var(--f-num);font-weight:600}
+.step.done .no{background:var(--yellow);color:#25333a}
+.step h3{font-size:16px}
+.step .dur{font-size:12px;font-weight:700;color:var(--accent)}
+.step ul{margin:0;padding-left:1.1em;font-size:13px;color:var(--muted)}
+
+.price{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.pi{background:var(--yellow-soft);border-radius:18px;padding:18px 22px;display:flex;flex-direction:column;gap:4px}
+.pi .l{font-weight:700;font-size:13px}
+.pi .v{font-family:var(--f-num);font-size:34px;font-weight:600;line-height:1.2;color:var(--accent)}
+.pi .v small{font-family:var(--f-body);font-size:15px;color:var(--ink);margin-left:4px}
+.pi .s{font-size:12px;color:var(--muted)}
+/* 締め */
+.closing{text-align:center}
+.closing .wrap{display:flex;flex-direction:column;align-items:center;gap:18px}
+.closing h2{font-size:clamp(24px,4vw,36px);font-style:italic;color:#fff}
+.closing p{color:#fff;max-width:56ch}
+.next{background:var(--surface);color:var(--ink);border-radius:20px;padding:22px 24px;text-align:left;display:flex;flex-direction:column;gap:10px;max-width:640px;width:100%}
+.next ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:14px}
+@media (max-width:760px){
+  section{padding-block:48px}
+  .ba{grid-template-columns:1fr}.ba .arrow{transform:rotate(90deg);justify-self:center}
+  .flow{grid-template-columns:1fr}.link{flex-direction:row;justify-content:center;align-items:center}.link b{transform:rotate(90deg)}
+  .roi{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:1fr 84px}.bar-row .track{grid-column:1/-1;grid-row:2}
+}
+@media (prefers-reduced-motion:no-preference){.track i{transition:width .35s ease}}
+</style>
+
+<div class="strip">20代の若手転職ならフッキャリ ── 社内業務のご提案</div>
+<header class="cover">
+  <div class="wrap">
+    <span class="balloon">Excel管理、卒業しませんか？</span>
+    <h1>なりたい自分に会いに行く人を、<br>もっと速く支えるために。</h1>
+    <p class="lead">問い合わせから面談、求人紹介、面接対策、成約・請求までを、ひとつの管理画面にまとめます。フッキャリのサイトとLINEにそのままつながる、5名のチームのための業務システムのご提案です。</p>
+    <p class="meta">業務管理システム「AgentBoard」ご提案資料 ／ 実際に触れるPOC（試作版）つき</p>
+    <a class="btn" href="poc/" target="_blank" rel="noopener">POCを触ってみる →</a>
+  </div>
+</header>
+
+<div class="wrap summary">
+  <div class="sum-card" aria-label="ご提案の要点">
+    <div class="sum-item"><span class="l">削減できる作業時間（試算）</span><span class="v" id="s-hours">—<small>時間/月</small></span><span class="s">5名合計。下の試算から自動で計算</span></div>
+    <div class="sum-item"><span class="l">金額に換算すると</span><span class="v" id="s-yen">—<small>万円/年</small></span><span class="s">時給換算 × 削減時間</span></div>
+    <div class="sum-item"><span class="l">初期費用の回収</span><span class="v" id="s-pay">—<small>か月</small></span><span class="s">時間削減のみで計算した場合</span></div>
+    <div class="sum-item"><span class="l">決定が増えた場合</span><span class="v" id="s-one">—<small>件</small></span><span class="s">この件数の決定で初期費用を回収</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">CURRENT ISSUES</span><h2>いまのExcel運用で<span class="mk">起きていること</span></h2><p>5名規模の転職エージェントで、Excel管理が限界を迎えるポイントは共通しています。</p></div>
+    <div class="grid g3">
+      <div class="card"><span class="rib">二重入力</span><h3>同じ情報を何度も書き写している</h3><p>LINEやフォームで届いた相談を手でExcelへ。推薦時には企業向けにもう一度。転記のたびに時間とミスが生まれます。</p></div>
+      <div class="card"><span class="rib">抜け漏れ</span><h3>「次に何をするか」が人の記憶頼り</h3><p>初回連絡、書類の催促、面接前のフォロー。誰がいつやるかがシートに見えず、返信が遅れた求職者は他社へ流れます。</p></div>
+      <div class="card"><span class="rib">状況共有</span><h3>選考の状況を聞かないと分からない</h3><p>どの求職者がどの企業の何次面接か。担当不在のときに答えられず、社長が全体を把握するのも一苦労です。</p></div>
+      <div class="card"><span class="rib">集計作業</span><h3>月末に帳簿とレポートを手作業で作る</h3><p>職業紹介事業者として必要な求職管理簿・求人管理簿・手数料管理簿や、売上の見込みを毎回Excelから集計しています。</p></div>
+      <div class="card"><span class="rib">効果測定</span><h3>どの集客が決定につながったか見えない</h3><p>Instagram・LINE・検索など、問い合わせの入口ごとの決定率が分からず、広告やSNSの打ち手を判断できません。</p></div>
+      <div class="card"><span class="rib">個人情報</span><h3>ファイルのコピーが散らばる</h3><p>履歴書や連絡先がPCやチャットに分散。誰が見たか、同意を取ったかを後から確かめられません。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-mint">
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">AFTER</span><h2>導入すると、<span class="mk">1日の動き方</span>が変わります</h2></div>
+    <div class="ba">
+      <div class="col before"><h3>いま（Excel＋LINE個別対応）</h3><ul><li>朝、Excelとトーク履歴を見比べて今日やることを探す</li><li>相談が来たらシートに転記し、空いている人に口頭で振る</li><li>面談日程はLINEで何往復もして調整</li><li>選考結果は担当の頭の中。社長は個別に確認</li><li>月末に帳簿・売上見込みを手で集計</li></ul></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="col after"><h3>導入後（AgentBoard）</h3><ul><li>ログインすると「今日やること・期限切れ」が自動で並ぶ</li><li>サイト・LINEからの相談は自動で登録され、担当も割り当て済み</li><li>求職者が空き枠から面談を自分で予約</li><li>選考ボードで全員の案件が一目で分かり、本人のマイページにも自動反映</li><li>帳簿・流入経路別レポートは常に最新、CSVですぐ出せる</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">CONNECTED</span><h2>サイトとLINEに<span class="mk">そのままつながる</span></h2><p>求職者が触れるところは今のフッキャリのデザインのまま。裏側の管理だけを置き換えます。</p></div>
+    <div class="flow">
+      <div class="node"><span class="tag">求職者</span><h3>フッキャリのサイト・LINE</h3><ul><li>LINEで無料相談／Webで面談予約</li><li>サイト掲載の求人を見て相談</li><li>URLから流入経路を自動判定</li></ul></div>
+      <div class="link" aria-hidden="true"><b>⇄</b>自動登録・通知</div>
+      <div class="node hub"><span class="tag">社内 5名</span><h3>AgentBoard 管理画面</h3><ul><li>求職者・求人・企業を一元管理</li><li>今日やること／選考ボード</li><li>成約・請求・法定帳簿・レポート</li></ul></div>
+      <div class="link" aria-hidden="true"><b>⇄</b>反映・LINE通知</div>
+      <div class="node"><span class="tag">求職者</span><h3>マイページ</h3><ul><li>紹介求人に「応募したい」で回答</li><li>選考状況・面接の予定を確認</li><li>履歴書の提出、面接対策の宿題</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-mint">
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">FEATURES</span><h2>業務の流れに沿った<span class="mk">主な機能</span></h2></div>
+    <div class="grid g4">
+      <div class="feat"><span class="stage">受付</span><h3>問い合わせ自動登録</h3><p>サイト・LINEからの相談を自動で登録し、担当と「初回連絡」タスクを割り当てます。</p></div>
+      <div class="feat"><span class="stage">面談</span><h3>ヒアリングシート</h3><p>転職理由・経験・希望・NG条件を決まった項目で記録。第三者提供の同意もここで管理。</p></div>
+      <div class="feat"><span class="stage">求人紹介</span><h3>求人マッチング</h3><p>希望職種・勤務地・年収・スキルから求人を点数順に表示。マイページで紹介し、本人が回答。</p></div>
+      <div class="feat"><span class="stage">選考</span><h3>選考ボード</h3><p>推薦から入社までをカードで管理。7日以上止まった案件は赤で警告します。</p></div>
+      <div class="feat"><span class="stage">面接対策</span><h3>練習記録と想定質問</h3><p>練習の評価と宿題を残し、企業ごとの想定質問を作ってマイページに共有します。</p></div>
+      <div class="feat"><span class="stage">成約</span><h3>請求・返金期限管理</h3><p>承諾した時点で手数料を自動計算。請求・入金状況と返金保証期間を追跡します。</p></div>
+      <div class="feat"><span class="stage">管理</span><h3>法定帳簿・レポート</h3><p>求職管理簿・求人管理簿・手数料管理簿、担当者別・流入経路別の実績を自動作成。</p></div>
+      <div class="feat"><span class="stage">連絡</span><h3>メッセージ・通知</h3><p>マイページでのやりとりを担当ごとに記録。ステータスが変わったらLINEで本人に通知。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="roi">
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">COST EFFECTIVENESS</span><h2>費用対効果の<span class="mk">試算</span></h2><p>業務量・時給・手数料は仮の値です。実際の数字に書き換えると、すべての結果がその場で計算し直されます。</p></div>
+    <div class="roi">
+      <form class="inputs" id="f" onsubmit="return false">
+        <h3>前提条件</h3>
+        <div class="grp">業務量</div>
+        <div class="inp"><label for="i-inq">月の新規相談数<small>サイト・LINE・紹介の合計</small></label><span class="box"><input id="i-inq" type="number" min="0" value="40">件</span></div>
+        <div class="inp"><label for="i-staff">社員数</label><span class="box"><input id="i-staff" type="number" min="1" value="5">名</span></div>
+        <div class="inp"><label for="i-act">進行中の応募数<small>推薦〜内定の案件</small></label><span class="box"><input id="i-act" type="number" min="0" value="25">件</span></div>
+        <div class="inp"><label for="i-dec">月の決定数</label><span class="box"><input id="i-dec" type="number" min="0" step="0.5" value="3">件</span></div>
+        <div class="inp"><label for="i-wage">時給換算<small>給与・社保込みの1時間あたり</small></label><span class="box"><input id="i-wage" type="number" min="0" step="100" value="2500">円</span></div>
+        <div class="grp">売上</div>
+        <div class="inp"><label for="i-fee">平均紹介手数料<small>理論年収 × 料率（税抜）</small></label><span class="box"><input id="i-fee" type="number" min="0" value="100">万円</span></div>
+        <div class="inp"><label for="i-up">相談→決定率の改善<small>返信の速さ・抜け漏れ防止の効果</small></label><span class="box"><input id="i-up" type="number" min="0" step="0.1" value="0.5">pt</span></div>
+        <div class="grp">費用（税別）</div>
+        <div class="inp"><label for="i-init">初期費用</label><span class="box"><input id="i-init" type="number" min="0" step="10" value="200">万円</span></div>
+        <div class="inp"><label for="i-mon">保守契約（年額）<small>保守・サーバー・LINE連携</small></label><span class="box"><input id="i-mon" type="number" min="0" step="1" value="30">万円/年</span></div>
+      </form>
+      <div class="results">
+        <div class="kpis">
+          <div class="kpi"><span class="l">削減できる作業時間</span><span class="v" id="r-h">—</span><span class="s" id="r-hs">—</span></div>
+          <div class="kpi"><span class="l">人件費に換算</span><span class="v" id="r-y">—</span><span class="s" id="r-ys">—</span></div>
+          <div class="kpi hl"><span class="l">月あたりの純効果</span><span class="v" id="r-net">—</span><span class="s">時間削減 − 保守費（月割り）</span></div>
+        </div>
+        <div class="panel">
+          <h3>業務ごとの削減時間（月あたり）</h3>
+          <div class="bars" id="bars"></div>
+          <div class="legend"><span><i style="background:var(--line)"></i>いま</span><span><i style="background:var(--brand)"></i>導入後</span></div>
+        </div>
+        <div class="payback">
+          <div class="pb"><span class="t">① 時間削減だけで見た場合</span><span class="v" id="p1">—</span><span class="s" id="p1s">—</span></div>
+          <div class="pb"><span class="t">② 決定率の改善も含めた場合</span><span class="v" id="p2">—</span><span class="s" id="p2s">—</span></div>
+        </div>
+        <div class="callout" id="callout">—</div>
+        <details class="panel">
+          <summary style="cursor:pointer;font-weight:700">試算の内訳と考え方</summary>
+          <div class="tbl-wrap" style="margin-top:12px"><table><thead><tr><th>業務</th><th>単位</th><th class="r">いま</th><th class="r">導入後</th><th class="r">月の回数</th><th>短くなる理由</th></tr></thead><tbody id="tbl"></tbody></table></div>
+          <p class="note" style="margin-top:10px">1回あたりの所要時間は、同規模の人材紹介会社でよくある値を仮に置いたものです。導入前に1週間ほど実際の作業時間を記録いただくと、より正確な試算に置き換えられます。決定率の改善は効果が出るまで時間がかかるため、①と分けて参考値として示しています。</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band-mint">
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">DESIGN</span><h2>システムの<span class="mk">設計概要</span></h2></div>
+    <div class="grid g2">
+      <div class="card"><span class="rib">データの持ち方</span><h3>「応募」を中心に、全部がつながる</h3><p>1人の求職者が複数の企業を並行して受ける前提で、「求職者 × 求人 ＝ 応募」を軸にしています。選考の進み具合、面接日、成約、請求、帳簿がすべて応募から自動でつながるため、転記が発生しません。</p><ul class="check"><li>求職者 ── 面談記録・書類・メッセージ・対応履歴</li><li>企業 ── 契約（料率・返金規定）・求人</li><li>応募 ── 選考ステータス・面接日・成約・請求</li></ul></div>
+      <div class="card"><span class="rib">構成と費用感</span><h3>小さく始めて、そのまま育てられる構成</h3><p>クラウドのデータベース（Google Firebase）と、どの端末のブラウザでも動く画面で構成します。5名規模ならサーバー代はほぼ無料枠で収まり、専用のPCやソフトのインストールは不要です。</p><ul class="check"><li>スマホ対応：外出先や面談の合間に確認・更新</li><li>LINE公式アカウント・今のサイトのフォームと連携</li><li>ExcelのデータをCSVでまとめて取り込み</li></ul></div>
+      <div class="card"><span class="rib">個人情報の保護</span><h3>履歴書を扱う前提のセキュリティ</h3><ul class="check"><li>社員ごとのログインと2段階認証</li><li>代表／社員で見られる範囲を分ける権限設定</li><li>誰がいつ何を変えたかの操作ログ</li><li>推薦前の第三者提供の同意をシステムで確認</li><li>退会者のデータ削除にも対応</li></ul></div>
+      <div class="card"><span class="rib">法令への備え</span><h3>職業紹介事業の帳簿を自動で</h3><p>職業安定法で備え付けが求められる帳簿や、年1回の事業報告に必要な集計を、日々の入力から作成します（正式な記載項目は導入時に確認して合わせます）。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">SCHEDULE</span><h2>導入の<span class="mk">進め方</span></h2><p>一度に全部を変えず、毎日使う機能から順に切り替えます。</p></div>
+    <div class="steps">
+      <div class="step done"><span class="no">0</span><span class="dur">完了</span><h3>POC（試作版）</h3><ul><li>主要画面と連携の動きを確認</li><li>操作感へのご意見をいただく</li></ul></div>
+      <div class="step"><span class="no">1</span><span class="dur">約6週間</span><h3>社内で使い始める</h3><ul><li>求職者・求人・選考・今日やること</li><li>Excelからデータを移行</li><li>ログイン・権限・操作ログ</li></ul></div>
+      <div class="step"><span class="no">2</span><span class="dur">約4週間</span><h3>サイト・LINEとつなぐ</h3><ul><li>相談の自動登録・面談予約</li><li>マイページとLINE通知</li><li>流入経路の記録</li></ul></div>
+      <div class="step"><span class="no">3</span><span class="dur">約4週間</span><h3>お金と帳簿</h3><ul><li>成約・請求・返金期限の管理</li><li>法定帳簿・レポート</li><li>AIによる想定質問・経歴要約（任意）</li></ul></div>
+    </div>
+    <div class="price" aria-label="費用">
+      <div class="pi"><span class="l">初期費用</span><span class="v">200<small>万円（税別）</small></span><span class="s">ステップ1〜3の開発・Excelデータ移行・操作説明を含む</span></div>
+      <div class="pi"><span class="l">保守契約</span><span class="v">30<small>万円/年（税別）</small></span><span class="s">月あたり2.5万円。不具合対応・サーバー管理・小さな改善</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-brand closing">
+  <div class="wrap">
+    <span class="balloon" style="align-self:center">まずは触ってみてください</span>
+    <h2>1件でも多く、<br>ぴったりの転職を。</h2>
+    <p>事務作業に使っていた時間を、求職者と向き合う時間に戻すためのシステムです。POCを実際に操作して、使い心地を確かめてください。</p>
+    <a class="btn" style="align-self:center" href="poc/" target="_blank" rel="noopener">POCを触ってみる →</a>
+    <div class="next">
+      <h3 style="font-size:16px">次のステップ</h3>
+      <ol>
+        <li>いまのExcelのシート構成（列名だけで可）を共有いただく</li>
+        <li>1時間ほど業務のヒアリング（1日の流れ・困りごと）</li>
+        <li>試算の数字を実数に置き換え、MVPの範囲を確定してご契約</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+var TASKS=[
+  {n:'問い合わせの転記・担当割り振り',u:'相談1件',b:10,a:2,q:function(v){return v.inq},why:'サイト・LINEから自動登録、担当も自動で割り当て'},
+  {n:'面談の日程調整',u:'相談1件',b:15,a:3,q:function(v){return v.inq*0.75},why:'求職者が空き枠から自分で予約'},
+  {n:'Excelの検索・更新・二重入力',u:'1人1日',b:30,a:10,q:function(v){return v.staff*20},why:'1画面で完結、今日やることが自動で並ぶ'},
+  {n:'選考状況の確認・本人への連絡',u:'応募1件・週',b:10,a:4,q:function(v){return v.act*4.3},why:'ステータス変更がマイページとLINEに自動反映'},
+  {n:'帳簿・月次レポートの作成',u:'月1回',b:480,a:60,q:function(){return 1},why:'日々の入力から自動で作成、CSVで出力'},
+  {n:'請求・入金・返金期限の管理',u:'決定1件',b:60,a:15,q:function(v){return v.dec},why:'承諾時に手数料を自動計算、期限を通知'}
+];
+function g(id){var x=parseFloat(document.getElementById(id).value);return isFinite(x)&&x>=0?x:0}
+function f1(n){return (Math.round(n*10)/10).toLocaleString()}
+function f0(n){return Math.round(n).toLocaleString()}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function months(init,net){if(init<=0)return '0';if(net<=0)return null;return f1(init/net)}
+function calc(){
+  var v={inq:g('i-inq'),staff:g('i-staff'),act:g('i-act'),dec:g('i-dec'),wage:g('i-wage'),fee:g('i-fee'),up:g('i-up'),init:g('i-init'),mon:g('i-mon')/12};
+  var rows=TASKS.map(function(t){var q=t.q(v);return {t:t,q:q,bm:t.b*q,am:t.a*q}});
+  var savedMin=rows.reduce(function(s,r){return s+r.bm-r.am},0),beforeMin=rows.reduce(function(s,r){return s+r.bm},0);
+  var hours=savedMin/60,yenMon=hours*v.wage/10000,net=yenMon-v.mon;
+  var upMon=v.inq*v.up/100*v.fee,net2=net+upMon;
+  var max=Math.max.apply(null,rows.map(function(r){return r.bm}))||1;
+  document.getElementById('bars').innerHTML=rows.map(function(r){return '<div class="bar-row"><span class="name">'+esc(r.t.n)+'<small>'+esc(r.t.why)+'</small></span><span class="track" role="img" aria-label="いま'+f1(r.bm/60)+'時間、導入後'+f1(r.am/60)+'時間"><i class="b" style="width:'+(r.bm/max*100)+'%"></i><i class="a" style="width:'+(r.am/max*100)+'%"></i></span><span class="val">'+f1(r.bm/60)+'h →<br><b>'+f1(r.am/60)+'h</b></span></div>'}).join('');
+  document.getElementById('tbl').innerHTML=rows.map(function(r){return '<tr><td>'+esc(r.t.n)+'</td><td>'+esc(r.t.u)+'</td><td class="r num">'+r.t.b+'分</td><td class="r num">'+r.t.a+'分</td><td class="r num">'+f1(r.q)+'</td><td>'+esc(r.t.why)+'</td></tr>'}).join('');
+  document.getElementById('r-h').innerHTML=f1(hours)+'<small>時間/月</small>';
+  document.getElementById('r-hs').textContent='いまの'+f1(beforeMin/60)+'時間のうち'+(beforeMin?Math.round(savedMin/beforeMin*100):0)+'%・1人あたり約'+f1(hours/(v.staff||1))+'時間';
+  document.getElementById('r-y').innerHTML=f1(yenMon)+'<small>万円/月</small>';
+  document.getElementById('r-ys').textContent='年間 約'+f0(yenMon*12)+'万円';
+  document.getElementById('r-net').innerHTML=(net>=0?'+':'')+f1(net)+'<small>万円/月</small>';
+  var p1=months(v.init,net),p2=months(v.init,net2);
+  document.getElementById('p1').textContent=p1===null?'回収できません':'約'+p1+'か月';
+  document.getElementById('p1s').textContent='月 '+f1(net)+'万円の純効果で、初期費用 '+f0(v.init)+'万円を回収';
+  document.getElementById('p2').textContent=p2===null?'回収できません':'約'+p2+'か月';
+  document.getElementById('p2s').textContent='決定率 +'+v.up+'pt で決定が月 '+f1(v.inq*v.up/100)+'件増え、売上 +'+f1(upMon)+'万円/月';
+  var need=v.fee>0?v.init/v.fee:0;
+  document.getElementById('callout').innerHTML='平均紹介手数料が '+f0(v.fee)+'万円なら、<span class="num">'+f1(need)+'件</span>の決定で初期費用を回収できます。抜け漏れ防止で<span class="mk">年に1〜2件</span>取りこぼしが減るだけでも、投資を上回る計算です。';
+  document.getElementById('s-hours').innerHTML=f0(hours)+'<small>時間/月</small>';
+  document.getElementById('s-yen').innerHTML=f0(yenMon*12)+'<small>万円/年</small>';
+  document.getElementById('s-pay').innerHTML=(p1===null?'—':p1)+'<small>か月</small>';
+  document.getElementById('s-one').innerHTML=f1(need)+'<small>件</small>';
+}
+document.getElementById('f').addEventListener('input',calc);
+calc();
+</script>

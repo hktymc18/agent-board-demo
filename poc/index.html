@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>AgentBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Noto+Sans+JP:wght@500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 左に業務ナビ、右に「今日やること」起点の作業面。求職者サイト側はスマホ枠＋連携ログの2カラム */
+:root{
+  /* ブランド：フッキャリのティール×イエロー。塗りは --brand、文字・線は読みやすい濃さの --accent */
+  --brand:#0bb3ab; --brand-ink:#ffffff; --brand-deep:#08918a; --brand-weak:#e2f4f3;
+  --yellow:#f7dd55; --yellow-soft:#fdf1a6; --marker:#fbef9f;
+  --bg:#eef6f5; --surface:#ffffff; --sunk:#e5f1f0; --ink:#25333a; --muted:#566a6e; --line:#d2e3e1;
+  --accent:#07827c; --accent-ink:#ffffff; --accent-weak:#dcf1ef;
+  --ok:#2e7a3a; --ok-weak:#e1f2e3; --warn:#8f5c0d; --warn-weak:#fcf0c9; --danger:#c0431b; --danger-weak:#fbe5dc; --info:#265f9e; --info-weak:#e1ecf8;
+  --line-green:#06c755; --line-deep:#04a346;
+  --frame:#25333a;
+  --shadow:0 1px 2px rgba(20,60,58,.06),0 6px 18px rgba(20,90,86,.07);
+  --f-display:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  --f-site:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --brand:#14bdb4; --brand-ink:#ffffff; --brand-deep:#0b7f79; --brand-weak:#163432;
+  --yellow:#e2c845; --yellow-soft:#4a4318; --marker:#4f481c;
+  --bg:#0f1716; --surface:#172221; --sunk:#121c1b; --ink:#e3eeec; --muted:#93a6a3; --line:#263634;
+  --accent:#4fd2c9; --accent-ink:#04211f; --accent-weak:#173532;
+  --ok:#73c27c; --ok-weak:#18301c; --warn:#e8b45a; --warn-weak:#33280f; --danger:#f08460; --danger-weak:#3a1d13; --info:#82b4ec; --info-weak:#16263a;
+  --frame:#000000; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --brand:#14bdb4; --brand-ink:#ffffff; --brand-deep:#0b7f79; --brand-weak:#163432;
+  --yellow:#e2c845; --yellow-soft:#4a4318; --marker:#4f481c;
+  --bg:#0f1716; --surface:#172221; --sunk:#121c1b; --ink:#e3eeec; --muted:#93a6a3; --line:#263634;
+  --accent:#4fd2c9; --accent-ink:#04211f; --accent-weak:#173532;
+  --ok:#73c27c; --ok-weak:#18301c; --warn:#e8b45a; --warn-weak:#33280f; --danger:#f08460; --danger-weak:#3a1d13; --info:#82b4ec; --info-weak:#16263a;
+  --frame:#000000; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.6}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;margin:0;text-wrap:balance;line-height:1.35}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+.side{background:var(--surface);border-right:1px solid var(--line);border-top:5px solid var(--yellow);padding:18px 12px;display:flex;flex-direction:column;gap:16px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:15px;flex:none}
+.brand b{font-family:var(--f-display);font-size:17px;letter-spacing:.02em}
+.brand small{display:block;color:var(--muted);font-size:11px;line-height:1.2}
+nav.menu{display:flex;flex-direction:column;gap:2px}
+nav.menu button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:8px;color:var(--muted);font-weight:700}
+nav.menu button:hover{background:var(--sunk);color:var(--ink)}
+nav.menu button.on{background:var(--accent-weak);color:var(--accent)}
+nav.menu button:focus-visible{outline:2px solid var(--accent)}
+nav.menu .sep{height:1px;background:var(--line);margin:8px 4px}
+nav.menu button.site{border:1px dashed var(--accent);color:var(--accent);margin-top:2px}
+.badge{font-family:var(--f-num);font-size:11px;background:var(--danger);color:#fff;border-radius:99px;padding:0 7px;line-height:18px}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted);padding:0 8px}
+.main{min-width:0;padding-inline:28px;padding-block:20px 60px;display:flex;flex-direction:column;gap:20px}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar h1{font-size:22px;margin-right:auto;letter-spacing:.04em}
+.topbar h1 span.mk{background:linear-gradient(transparent 62%,var(--marker) 62%);padding:0 2px}
+.poc{font-size:12px;background:var(--yellow-soft);color:var(--ink);border-radius:99px;padding:3px 12px;font-weight:700}
+.btn{cursor:pointer;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);box-shadow:0 2px 0 var(--brand-deep)}
+.btn.pri:hover{filter:brightness(1.06);color:var(--brand-ink)}
+.btn.sm{padding:4px 10px;font-size:12px}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:16px 18px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:4px 12px;margin-bottom:10px;flex-wrap:wrap}
+.sec-h h2{font-size:16px;flex:none;letter-spacing:.03em;padding-left:10px;border-left:4px solid var(--brand);line-height:1.2}
+.sec-h span{color:var(--muted);font-size:12px}
+.grid{display:grid;gap:16px}
+.g-kpi{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.kpi{padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.kpi .l{font-size:12px;color:var(--muted);font-weight:700}
+.kpi .v{font-family:var(--f-num);font-size:26px;line-height:1.2}
+.kpi .v small{font-family:var(--f-body);font-size:13px;color:var(--muted);margin-left:3px}
+.kpi .s{font-size:12px;color:var(--muted)}
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid var(--line);min-width:0}
+.row:first-child{border-top:0}
+.row .grow{flex:1;min-width:0}
+.row .t{font-weight:700}
+.row .d{font-size:12px;color:var(--muted)}
+.clk{cursor:pointer}
+.clk:hover .t{color:var(--accent);text-decoration:underline}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;border-radius:99px;padding:1px 9px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.c-ok{background:var(--ok-weak);color:var(--ok)}
+.c-warn{background:var(--warn-weak);color:var(--warn)}
+.c-danger{background:var(--danger-weak);color:var(--danger)}
+.c-info{background:var(--info-weak);color:var(--info)}
+.c-acc{background:var(--accent-weak);color:var(--accent)}
+.when{font-family:var(--f-num);font-size:12px;min-width:74px;color:var(--muted)}
+.when.late{color:var(--danger);font-weight:700}
+.empty{color:var(--muted);font-size:13px;padding:14px 4px}
+.funnel{display:flex;flex-direction:column;gap:8px}
+.fn{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:10px;font-size:13px}
+.fn .bar{height:18px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.fn .bar i{display:block;height:100%;background:var(--brand);border-radius:4px;opacity:.85}
+.fn .n{font-family:var(--f-num);text-align:right}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font-size:12px;color:var(--muted);text-align:left;font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.clk:hover td{background:var(--sunk)}
+td.r,th.r{text-align:right}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=text],input[type=search],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+textarea{width:100%;resize:vertical;min-height:70px}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--sunk);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:200px}
+.col.over{outline:2px dashed var(--accent)}
+.col h3{font-size:13px;display:flex;justify-content:space-between;color:var(--muted);padding:2px 4px}
+.kc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px;cursor:grab}
+.kc:hover{border-color:var(--accent)}
+.kc .t{font-weight:700;cursor:pointer}
+.kc .d{font-size:12px;color:var(--muted)}
+.kc select{font-size:12px;padding:3px 6px}
+.col.closed{opacity:.75}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{all:unset;cursor:pointer;padding:9px 14px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent)}
+.dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 14px;font-size:13px}
+.dl dt{color:var(--muted);font-weight:700}
+.dl dd{margin:0}
+.head-card{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--accent-weak);color:var(--accent);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:20px;flex:none}
+.form{display:grid;gap:12px}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}
+.form label>*{font-weight:400;color:var(--ink);font-size:14px}
+.f2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px}
+.score{display:flex;align-items:center;gap:8px}
+.score .bar{width:90px;height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.score .bar i{display:block;height:100%;background:var(--brand)}
+.match{display:flex;gap:14px;align-items:center;padding:12px 4px;border-top:1px solid var(--line);flex-wrap:wrap}
+.match:first-child{border-top:0}
+.match .grow{flex:1;min-width:200px}
+.why{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.stars{color:var(--warn);letter-spacing:1px}
+.ai{border:1px dashed var(--accent);background:var(--accent-weak);border-radius:var(--r);padding:14px 16px}
+.ai ol{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.ai li small{display:block;color:var(--muted)}
+.modal-bg{position:fixed;inset:0;background:rgba(10,20,18,.45);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{width:min(620px,100%);max-height:90vh;overflow:auto;background:var(--surface);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 18px;border-radius:99px;font-weight:700;z-index:60;font-size:13px;max-width:calc(100% - 32px)}
+.note{font-size:12px;color:var(--muted)}
+.timeline{display:flex;flex-direction:column}
+.tl{display:grid;grid-template-columns:80px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.tl:first-child{border-top:0}
+.tl .w{font-family:var(--f-num);font-size:12px;color:var(--muted)}
+.stagebar{display:flex;gap:3px;margin-top:6px}
+.stagebar i{flex:1;height:5px;border-radius:3px;background:var(--sunk)}
+.stagebar i.on{background:var(--brand)}
+.stagebar.x i.on{background:var(--muted)}
+.csv{font-family:var(--f-num);font-size:12px;min-height:120px}
+.thread{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;padding:4px}
+.msg{max-width:80%;padding:8px 12px;border-radius:14px;background:var(--sunk);align-self:flex-start;font-size:13px}
+.msg.me{align-self:flex-end;background:var(--brand);color:var(--brand-ink)}
+.msg small{display:block;font-size:11px;opacity:.75}
+.src{font-size:11px;font-weight:700;border-radius:4px;padding:0 6px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+/* 求職者サイト側（組み込みイメージ）：今のサイトのトーンに合わせる */
+.site-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:start}
+.phone{width:390px;max-width:100%;height:780px;border:10px solid var(--frame);border-radius:38px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.ph-bar{background:var(--surface);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--f-site)}
+.s-logo{display:flex;flex-direction:column;line-height:1.1;font-weight:700;font-size:20px;letter-spacing:.18em;color:var(--ink)}
+.s-logo small{font-size:8px;letter-spacing:.1em;font-weight:500;color:var(--ink)}
+.s-logo small em{font-style:normal;color:var(--accent)}
+.s-burger{width:26px;display:flex;flex-direction:column;gap:6px}
+.s-burger i{height:3px;background:var(--brand);border-radius:2px}
+.s-strip{background:var(--yellow);color:#25333a;text-align:center;font-weight:900;font-size:13px;letter-spacing:.08em;padding:7px 8px;font-family:var(--f-site)}
+.ph-body{flex:1;overflow:auto;font-family:var(--f-site);display:flex;flex-direction:column;background:var(--brand-weak);letter-spacing:.04em}
+.ph-body>*{flex-shrink:0}
+.ph-body h2,.ph-body h3{font-family:var(--f-site)}
+.s-hero{background:var(--brand);padding:26px 20px 30px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.s-hero::after{content:"";position:absolute;right:-40px;top:18px;width:140px;height:22px;border-radius:99px;background:rgba(255,255,255,.18);transform:rotate(-22deg)}
+.s-hero h2{font-size:30px;line-height:1.35;color:#fff;font-weight:900;font-style:italic;letter-spacing:.04em;text-shadow:0 2px 0 rgba(0,0,0,.08)}
+.s-hero p{margin:0;font-size:13px;color:#fff}
+.s-balloon{align-self:flex-start;background:var(--yellow-soft);color:var(--accent);font-weight:900;font-size:15px;border-radius:99px;padding:4px 18px;position:relative}
+.s-balloon::after{content:"";position:absolute;left:50%;bottom:-7px;border:7px solid transparent;border-top-color:var(--yellow-soft);border-bottom:0;transform:translateX(-50%)}
+.s-cta{background:var(--surface);margin:-14px 14px 0;border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:12px;position:relative;box-shadow:var(--shadow)}
+.s-yel{background:var(--yellow-soft);border-radius:14px;padding:12px 14px;font-weight:900;font-size:14px;line-height:1.6;color:var(--ink)}
+.s-free{align-self:center;background:var(--yellow);color:#25333a;font-weight:900;font-size:12px;border-radius:99px;padding:4px 16px}
+.s-sec{padding:22px 16px;display:flex;flex-direction:column;gap:12px}
+.s-sec h3{font-size:17px;font-weight:900;align-self:flex-start;background:linear-gradient(transparent 60%,var(--marker) 60%);padding:0 2px;color:var(--ink)}
+.s-btn{all:unset;cursor:pointer;text-align:center;background:var(--brand);color:#fff;font-weight:900;border-radius:99px;padding:13px 18px;font-family:var(--f-site);letter-spacing:.06em;box-shadow:0 4px 0 var(--brand-deep);display:flex;align-items:center;justify-content:center;gap:8px}
+.s-btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--brand-deep)}
+.s-btn.line{background:var(--line-green);box-shadow:0 4px 0 var(--line-deep)}
+.s-btn .lic{background:#fff;color:var(--line-green);font-size:11px;font-weight:900;border-radius:10px;padding:2px 6px;letter-spacing:0}
+.s-btn.sub{background:var(--surface);color:var(--accent);box-shadow:0 3px 0 var(--brand);border:2px solid var(--brand)}
+.s-btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.s-job{background:var(--surface);border:2px solid var(--brand);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.s-job-h{background:var(--brand);color:#fff;font-weight:900;text-align:center;padding:7px 10px;font-size:13px;letter-spacing:.06em}
+.s-job-b{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.s-job b{font-size:15px}
+.s-job .d{font-size:12px;color:var(--muted)}
+.s-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;font-size:11px;font-weight:700;color:var(--ink);background:var(--surface);border-radius:16px;padding:14px 8px}
+.s-steps span{display:flex;flex-direction:column;align-items:center;gap:6px}
+.s-steps i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-family:var(--f-num);font-size:13px}
+.s-panel{background:var(--surface);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.s-panel input[type=checkbox]{accent-color:var(--brand)}
+.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.slot{all:unset;cursor:pointer;border:1.5px solid var(--line);border-radius:12px;padding:8px;text-align:center;font-size:12px;color:var(--ink);background:var(--surface)}
+.slot.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.slot:focus-visible{outline:2px solid var(--accent)}
+.s-card{background:var(--surface);border-radius:16px;padding:13px 15px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 0 var(--line)}
+.s-rib{align-self:flex-start;background:var(--yellow);color:var(--accent);font-weight:900;font-size:12px;padding:2px 14px 2px 10px;margin:-13px 0 2px -15px;clip-path:polygon(0 0,100% 0,calc(100% - 7px) 50%,100% 100%,0 100%);border-top-left-radius:16px}
+.s-prog{display:flex;gap:3px}
+.s-prog i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.s-prog i.on{background:var(--brand)}
+.feed{display:flex;flex-direction:column}
+.ev{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.ev:first-child{border-top:0}
+.ev .dir{font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;height:fit-content;white-space:nowrap}
+.ev .in{background:var(--accent-weak);color:var(--accent)}
+.ev .out{background:var(--info-weak);color:var(--info)}
+.ev .line{background:var(--ok-weak);color:var(--ok)}
+.ev a{color:var(--accent)}
+.flash{animation:fl 1.6s ease-out}
+@keyframes fl{from{background:var(--warn-weak)}to{background:transparent}}
+@media (max-width:1100px){.site-wrap{grid-template-columns:1fr}.phone{margin-inline:auto}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:20;flex-direction:row;align-items:center;padding:8px 12px;gap:10px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto}
+  .brand small,.side-foot{display:none}
+  nav.menu{flex-direction:row}
+  nav.menu .sep{display:none}
+  nav.menu button{padding:7px 10px;white-space:nowrap}
+  .main{padding-inline:16px}
+  .dl{grid-template-columns:96px minmax(0,1fr)}
+  .phone{border-width:6px;border-radius:24px;height:680px}
+}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}}
+@media (prefers-reduced-motion:no-preference){.kc,.btn,nav.menu button,.slot{transition:background .15s,border-color .15s,color .15s}}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">フ</div><div><b>AgentBoard</b><small>フッキャリ 社内業務管理</small></div></div>
+    <nav class="menu" id="menu"></nav>
+    <div class="side-foot">
+      <label for="who">ログイン中（デモ）</label>
+      <select id="who" onchange="S.me=this.value;save();render()"></select>
+      <button class="btn sm" onclick="askReset()">デモデータに戻す</button>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<div id="layer"></div>
+
+<script>
+/* ===== 基本 ===== */
+var STAGES=['推薦準備','書類選考','一次面接','最終面接','内定','承諾','入社'];
+var CLOSED='見送り';
+var CSTAT=['新規問い合わせ','面談予約済','面談済','求人紹介中','選考中','内定','入社決定','休止'];
+var STAFF=['佐藤（代表）','田中','鈴木','高橋','伊藤'];
+var JOBTYPES=['法人営業','営業事務','一般事務','カスタマーサポート','ITエンジニア','Webデザイナー','販売・接客','人事'];
+var AREAS=['天神・博多','福岡市内（その他）','北九州','久留米','リモート可'];
+var SOURCES={ig:'Instagram',line:'LINE',google:'Google検索',tiktok:'TikTok','':'直接・その他'};
+var KEY='agentboard-fuccari-v2';
+function pad(n){return (n<10?'0':'')+n}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+var TODAY=new Date();TODAY.setHours(0,0,0,0);
+function day(n){var d=new Date(TODAY);d.setDate(d.getDate()+n);return iso(d)}
+function diff(s){return Math.round((new Date(s+'T00:00:00')-TODAY)/86400000)}
+function fd(s){if(!s)return '—';var d=new Date(s+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()+'('+'日月火水木金土'[d.getDay()]+')'}
+function rel(s){var n=diff(s);return n===0?'今日':n===1?'明日':n===-1?'昨日':n<0?(-n)+'日前':n+'日後'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function man(n){return Math.round(n*10)/10+'万円'}
+function yen(n){return '¥'+Math.round(n*10000).toLocaleString()}
+function uid(p){return p+Math.random().toString(36).slice(2,8)}
+function now(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())}
+
+/* ===== デモデータ（すべて架空） ===== */
+function seed(){
+  function cand(o){return Object.assign({hearing:{},practice:[],docs:{resume:'',cv:''},contact:'LINE',shareQ:{}},o)}
+  var C=[
+   cand({id:'c1',name:'山本 翔太',kana:'やまもと しょうた',age:27,phone:'090-1111-0001',email:'yamamoto@example.com',current:'不動産会社 / 個人営業',wantType:'法人営業',area:'天神・博多',salaryNow:340,salaryWant:400,skills:['法人営業','新規開拓','提案資料作成'],owner:'田中',source:'ig',created:day(-34),status:'面談済',next:{t:'一次面接の前日リマインド',d:day(1)},
+    hearing:{reason:'土日休みで、長く続けられる法人営業がしたい',skill:'個人営業で月間目標を14ヶ月連続達成',wish:'年収400万以上、土日祝休み、天神・博多エリア',ng:'飛び込み中心',timing:'3ヶ月以内',consent:true},
+    docs:{resume:'山本_履歴書.pdf',cv:'山本_職務経歴書.pdf'},
+    practice:[{d:day(-2),job:'j1',score:3,good:'実績を数字で話せている',bad:'志望動機が業界一般論。はかたリンクのサービスに1つ触れる',shared:true}]}),
+   cand({id:'c2',name:'中村 彩',kana:'なかむら あや',age:25,phone:'090-1111-0002',email:'nakamura@example.com',current:'アパレル / 販売スタッフ',wantType:'営業事務',area:'天神・博多',salaryNow:270,salaryWant:300,skills:['接客','Excel'],owner:'鈴木',source:'ig',created:day(-40),status:'面談済',next:{t:'最終面接の振り返り連絡',d:day(1)},
+    hearing:{reason:'立ち仕事から事務職へ。土日休みにしたい',skill:'店舗の在庫管理・売上集計をExcelで担当',wish:'事務職、土日休み',ng:'転勤',timing:'3ヶ月以内',consent:true},docs:{resume:'中村_履歴書.pdf',cv:''},
+    practice:[{d:day(-6),job:'j6',score:4,good:'受け答えが落ち着いている',bad:'逆質問をもう1つ用意',shared:true}]}),
+   cand({id:'c3',name:'小林 大輔',kana:'こばやし だいすけ',age:31,phone:'090-1111-0003',email:'kobayashi@example.com',current:'SES企業 / システムエンジニア',wantType:'ITエンジニア',area:'リモート可',salaryNow:420,salaryWant:500,skills:['Java','AWS','チームリード'],owner:'田中',source:'google',created:day(-50),status:'面談済',next:{t:'内定条件の確認（年収・入社日）',d:day(0)},
+    hearing:{reason:'自社サービス開発に携わりたい',skill:'Java歴7年、3名チームのリード',wish:'リモート併用、年収500万',ng:'客先常駐',timing:'即時',consent:true},docs:{resume:'小林_履歴書.pdf',cv:'小林_職務経歴書.pdf'}}),
+   cand({id:'c4',name:'加藤 美咲',kana:'かとう みさき',age:24,phone:'090-1111-0004',email:'kato@example.com',current:'飲食店 / ホールスタッフ',wantType:'カスタマーサポート',area:'福岡市内（その他）',salaryNow:250,salaryWant:290,skills:['接客','目標達成'],owner:'高橋',source:'tiktok',created:day(-21),status:'面談済',next:{t:'一次面接（本日16:00）の後に感想ヒアリング',d:day(0)},
+    hearing:{reason:'夜遅いシフトをやめて生活リズムを整えたい',skill:'アルバイトリーダーとして新人教育',wish:'日勤のみ、未経験OK',ng:'夜勤',timing:'3ヶ月以内',consent:true},docs:{resume:'加藤_履歴書.pdf',cv:''},
+    practice:[{d:day(-1),job:'j7',score:2,good:'明るく印象が良い',bad:'志望理由が弱い。接客経験とサポート業務のつながりを練習',shared:true}]}),
+   cand({id:'c5',name:'吉田 健',kana:'よしだ けん',age:34,phone:'090-1111-0005',email:'yoshida@example.com',current:'メーカー / 経理',wantType:'一般事務',area:'天神・博多',salaryNow:400,salaryWant:430,skills:['経理','Excel','管理職'],owner:'佐藤（代表）',source:'line',created:day(-60),status:'面談済',next:{t:'最終面接の対策日程を決める',d:day(-1)},
+    hearing:{reason:'Uターンで地元の福岡に戻りたい',skill:'月次決算、後輩3名の指導',wish:'年収430万、福岡市内',ng:'特になし',timing:'半年以内',consent:true},docs:{resume:'吉田_履歴書.pdf',cv:'吉田_職務経歴書.pdf'}}),
+   cand({id:'c6',name:'山田 優花',kana:'やまだ ゆか',age:28,phone:'090-1111-0006',email:'yamada@example.com',current:'印刷会社 / DTPオペレーター',wantType:'Webデザイナー',area:'天神・博多',salaryNow:300,salaryWant:350,skills:['Photoshop','Illustrator','Figma'],owner:'鈴木',source:'ig',created:day(-28),status:'面談済',next:{t:'書類選考の状況を企業に確認',d:day(-2)},
+    hearing:{reason:'Webの仕事に挑戦したい',skill:'チラシ・パンフ制作5年',wish:'Web制作会社、年収350万',ng:'特になし',timing:'3ヶ月以内',consent:true},docs:{resume:'山田_履歴書.pdf',cv:'山田_職務経歴書.pdf'}}),
+   cand({id:'c7',name:'佐々木 拓海',kana:'ささき たくみ',age:23,phone:'090-1111-0007',email:'sasaki@example.com',current:'（未ヒアリング）',wantType:'法人営業',area:'天神・博多',salaryNow:0,salaryWant:0,skills:[],owner:'伊藤',source:'ig',created:day(0),status:'面談予約済',next:{t:'面談前にLINEで挨拶',d:day(0)},contact:'LINE'}),
+   cand({id:'c8',name:'松本 玲奈',kana:'まつもと れな',age:29,phone:'090-1111-0008',email:'matsumoto@example.com',current:'IT企業 / 人事アシスタント',wantType:'人事',area:'天神・博多',salaryNow:330,salaryWant:370,skills:['採用補助','労務'],owner:'伊藤',source:'google',created:day(-3),status:'新規問い合わせ',next:{t:'面談日程の候補を送る',d:day(-1)},contact:'メール'}),
+   cand({id:'c9',name:'井上 涼',kana:'いのうえ りょう',age:26,phone:'090-1111-0009',email:'inoue@example.com',current:'Web制作会社 / コーダー',wantType:'ITエンジニア',area:'リモート可',salaryNow:310,salaryWant:380,skills:['React','TypeScript'],owner:'高橋',source:'tiktok',created:day(-9),status:'面談済',next:{t:'推薦文を作成して企業へ送る',d:day(1)},
+    hearing:{reason:'モダンな開発環境で働きたい',skill:'React歴2年',wish:'リモート併用、年収380万',ng:'SES',timing:'3ヶ月以内',consent:true},docs:{resume:'井上_履歴書.pdf',cv:''}}),
+   cand({id:'c10',name:'木村 早紀',kana:'きむら さき',age:26,phone:'090-1111-0010',email:'kimura@example.com',current:'コールセンター / SV',wantType:'カスタマーサポート',area:'天神・博多',salaryNow:290,salaryWant:330,skills:['顧客対応','SaaS'],owner:'鈴木',source:'line',created:day(-12),status:'面談済',next:{t:'紹介求人への応募意思を確認',d:day(2)},
+    hearing:{reason:'顧客に長く寄り添う仕事がしたい',skill:'SV経験2年',wish:'年収330万',ng:'夜勤',timing:'3ヶ月以内',consent:true}}),
+   cand({id:'c11',name:'林 慎吾',kana:'はやし しんご',age:30,phone:'090-1111-0011',email:'hayashi@example.com',current:'印刷会社 / ルート営業',wantType:'法人営業',area:'天神・博多',salaryNow:360,salaryWant:400,skills:['法人営業'],owner:'田中',source:'ig',created:day(-95),status:'面談済',next:{t:'入社1ヶ月フォロー面談',d:day(18)},hearing:{consent:true}}),
+   cand({id:'c12',name:'清水 真央',kana:'しみず まお',age:27,phone:'090-1111-0012',email:'shimizu@example.com',current:'会計事務所 / スタッフ',wantType:'一般事務',area:'天神・博多',salaryNow:300,salaryWant:340,skills:['経理','Excel'],owner:'佐藤（代表）',source:'google',created:day(-45),status:'面談済',next:{t:'退職交渉の進捗確認',d:day(3)},hearing:{consent:true}})
+  ];
+  var CO=[
+   {id:'k1',name:'株式会社はかたリンク',ind:'IT・SaaS',fee:30,refund:'1ヶ月以内 80% / 3ヶ月以内 50%',contract:day(-300),contact:'人事部 岡田様'},
+   {id:'k2',name:'九州みらい物流株式会社',ind:'物流',fee:30,refund:'1ヶ月以内 100% / 3ヶ月以内 50%',contract:day(-200),contact:'管理部 西村様'},
+   {id:'k3',name:'株式会社クラウドキュウシュウ',ind:'IT',fee:35,refund:'3ヶ月以内 50%',contract:day(-120),contact:'開発部 森様'},
+   {id:'k4',name:'天神フードサービス株式会社',ind:'飲食チェーン本部',fee:30,refund:'1ヶ月以内 80% / 3ヶ月以内 30%',contract:day(-400),contact:'人事課 池田様'},
+   {id:'k5',name:'株式会社ブライトHR福岡',ind:'人材',fee:30,refund:'1ヶ月以内 80%',contract:day(-90),contact:'代表 石川様'},
+   {id:'k6',name:'株式会社テンジンデザイン',ind:'Web制作',fee:30,refund:'3ヶ月以内 50%',contract:day(-60),contact:'総務 前田様'}
+  ];
+  var J=[
+   {id:'j1',co:'k1',title:'法人営業（SaaS）未経験歓迎',type:'法人営業',min:350,max:480,area:'天神・博多',skills:['法人営業','新規開拓'],open:true,pub:true,hl:'完全週休2日・土日祝休み'},
+   {id:'j2',co:'k1',title:'カスタマーサポート',type:'カスタマーサポート',min:280,max:360,area:'天神・博多',skills:['顧客対応','SaaS'],open:true,pub:true,hl:'未経験OK・残業月10h'},
+   {id:'j3',co:'k3',title:'バックエンドエンジニア',type:'ITエンジニア',min:420,max:600,area:'リモート可',skills:['Java','AWS'],open:true,pub:true,hl:'リモート週3・フレックス'},
+   {id:'j4',co:'k3',title:'フロントエンドエンジニア',type:'ITエンジニア',min:350,max:500,area:'リモート可',skills:['React','TypeScript'],open:true,pub:false,hl:'自社サービス'},
+   {id:'j5',co:'k2',title:'管理部 一般事務（経理寄り）',type:'一般事務',min:380,max:450,area:'天神・博多',skills:['経理','Excel'],open:true,pub:true,hl:'博多駅徒歩5分'},
+   {id:'j6',co:'k5',title:'営業事務',type:'営業事務',min:270,max:320,area:'天神・博多',skills:['Excel','接客'],open:true,pub:true,hl:'土日祝休み・20代活躍中'},
+   {id:'j7',co:'k4',title:'お客様相談室スタッフ',type:'カスタマーサポート',min:260,max:320,area:'福岡市内（その他）',skills:['接客','顧客対応'],open:true,pub:true,hl:'日勤のみ'},
+   {id:'j8',co:'k2',title:'一般事務',type:'一般事務',min:300,max:360,area:'天神・博多',skills:['Excel'],open:true,pub:false,hl:''},
+   {id:'j9',co:'k6',title:'Webデザイナー（アシスタントから）',type:'Webデザイナー',min:300,max:380,area:'天神・博多',skills:['Photoshop','Figma'],open:true,pub:true,hl:'ポートフォリオ相談可'},
+   {id:'j10',co:'k2',title:'ルート営業',type:'法人営業',min:340,max:420,area:'北九州',skills:['法人営業'],open:true,pub:false,hl:''}
+  ];
+  function A(id,c,j,st,upd,iv,intent){return {id:id,c:c,j:j,stage:st,upd:upd,iv:iv||null,intent:intent||'応募したい',hist:[{s:st,d:upd}]}}
+  var AP=[
+   A('a1','c1','j1','一次面接',day(-3),{d:day(2),t:'14:00',k:'一次面接'}),
+   A('a2','c1','j10','書類選考',day(-9)),
+   A('a3','c2','j6','最終面接',day(-2),{d:day(1),t:'11:00',k:'最終面接'}),
+   A('a4','c3','j3','内定',day(-1)),
+   A('a5','c4','j7','一次面接',day(-5),{d:day(0),t:'16:00',k:'一次面接'}),
+   A('a6','c5','j5','最終面接',day(-4),{d:day(3),t:'10:00',k:'最終面接'}),
+   A('a7','c6','j9','書類選考',day(-8)),
+   A('a8','c11','j1','入社',day(-12)),
+   A('a9','c12','j8','承諾',day(-6)),
+   A('a10','c10','j2','推薦準備',day(-1),null,'未確認'),
+   A('a14','c10','j7','推薦準備',day(-1),null,'未確認'),
+   A('a11','c6','j2','見送り',day(-6)),
+   A('a12','c9','j4','推薦準備',day(0)),
+   A('a13','c2','j8','見送り',day(-15))
+  ];
+  var PL=[{app:'a8',salary:400,join:day(-12),inv:'入金済'},{app:'a9',salary:330,join:day(20),inv:'未請求'}];
+  var MTG=[
+   {id:'m1',c:'c7',d:day(1),t:'19:00',owner:'伊藤',how:'オンライン（Zoom）',kind:'初回面談'},
+   {id:'m2',c:'c10',d:day(0),t:'13:00',owner:'鈴木',how:'来社（天神オフィス）',kind:'求人紹介面談'}
+  ];
+  var MSG=[
+   {id:'g1',c:'c1',from:'cand',d:day(-1),tm:'21:14',t:'一次面接の服装はスーツの方がいいですか？',read:false},
+   {id:'g2',c:'c4',from:'staff',d:day(-1),tm:'10:02',t:'明日16時の面接、がんばってください！終わったら感想を教えてくださいね',read:true},
+   {id:'g3',c:'c4',from:'cand',d:day(-1),tm:'12:40',t:'ありがとうございます！がんばります',read:true}
+  ];
+  var LOG=[];
+  function L(c,d,t,by){LOG.push({id:uid('l'),c:c,d:d,t:t,by:by})}
+  L('c1',day(-34),'サイトから無料相談を申し込み（Instagram経由）','サイト');L('c1',day(-30),'初回面談（オンライン60分）','田中');L('c1',day(-20),'はかたリンク・九州みらい物流へ推薦','田中');L('c1',day(-3),'はかたリンク 書類通過 → 一次面接設定','田中');
+  L('c2',day(-38),'初回面談','鈴木');L('c2',day(-2),'ブライトHR福岡 一次通過 → 最終へ','鈴木');
+  L('c3',day(-1),'クラウドキュウシュウから内定連絡。提示年収 500万','田中');
+  L('c7',day(0),'サイトから無料相談を申し込み（Instagram経由）。面談予約 '+fd(day(1))+' 19:00','サイト');
+  L('c8',day(-3),'サイトから無料相談を申し込み（Google検索経由）。面談日時は未選択','サイト');
+  L('c10',day(-1),'マイページに求人2件を紹介','鈴木');
+  L('c11',day(-12),'はかたリンクへ入社','田中');L('c12',day(-6),'九州みらい物流 内定承諾','佐藤（代表）');
+  var EV=[
+   {d:day(0),tm:'08:41',dir:'in',t:'佐々木 拓海さんがサイトから無料相談を申し込み（Instagram経由）→ 求職者に自動登録・面談予約を確定',c:'c7'},
+   {d:day(-1),tm:'21:14',dir:'in',t:'山本 翔太さんがマイページからメッセージを送信',c:'c1'},
+   {d:day(-1),tm:'15:20',dir:'line',t:'木村 早紀さんへLINEで通知：マイページに求人2件のご紹介',c:'c10'}
+  ];
+  return {me:'田中',C:C,CO:CO,J:J,AP:AP,PL:PL,MTG:MTG,MSG:MSG,LOG:LOG,EV:EV,view:'home',param:null,tab:'over',
+          site:{sv:'top',utm:'ig',job:null,slot:null,my:'c10',flash:null}};
+}
+var S;
+function load(){try{var r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);return}}catch(e){}S=seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+load();
+
+/* ===== 参照ヘルパ ===== */
+function C(id){return S.C.find(function(x){return x.id===id})}
+function J(id){return S.J.find(function(x){return x.id===id})}
+function CO(id){return S.CO.find(function(x){return x.id===id})}
+function AP(id){return S.AP.find(function(x){return x.id===id})}
+function appsOf(cid){return S.AP.filter(function(a){return a.c===cid})}
+function si(s){return STAGES.indexOf(s)}
+function src(c){return SOURCES[c.source]||c.source}
+function cstatus(c){
+  var act=appsOf(c.id).filter(function(a){return a.stage!==CLOSED});
+  if(!act.length)return c.status;
+  var m=Math.max.apply(null,act.map(function(a){return si(a.stage)}));
+  if(m>=5)return '入社決定'; if(m>=4)return '内定'; if(m>=1)return '選考中'; return '求人紹介中';
+}
+function stChip(s){var m={'新規問い合わせ':'c-danger','面談予約済':'c-warn','面談済':'c-info','求人紹介中':'c-info','選考中':'c-acc','内定':'c-ok','入社決定':'c-ok','休止':''};return '<span class="chip '+(m[s]||'')+'">'+esc(s)+'</span>'}
+function stageChip(s){var i=si(s);var cl=s===CLOSED?'':i>=4?'c-ok':i>=1?'c-acc':'c-info';return '<span class="chip '+cl+'">'+esc(s)+'</span>'}
+function intentChip(a){if(a.stage!=='推薦準備')return '';var m={'未確認':'c-warn','応募したい':'c-ok','見送り希望':''};return '<span class="chip '+m[a.intent]+'">本人：'+(a.intent==='未確認'?'返答待ち':a.intent)+'</span>'}
+function fee(p){var a=AP(p.app),j=J(a.j),co=CO(j.co);return p.salary*co.fee/100}
+function log(cid,t,by){S.LOG.push({id:uid('l'),c:cid,d:day(0),t:t,by:by||S.me})}
+function ev(dir,t,cid){S.EV.unshift({d:day(0),tm:now(),dir:dir,t:t,c:cid})}
+function notify(c,t){ev(c.contact==='LINE'?'line':'out',c.name+'さんへ'+(c.contact==='LINE'?'LINEで通知':c.contact==='電話'?'SMSで通知':'メールで通知')+'：'+t,c.id)}
+function stale(a){return a.stage!==CLOSED&&si(a.stage)<5&&diff(a.upd)<=-7}
+function unread(cid){return S.MSG.filter(function(m){return m.from==='cand'&&!m.read&&(!cid||m.c===cid)}).length}
+
+/* ===== マッチング ===== */
+function score(c,j){
+  var s=0,why=[];
+  if(c.wantType===j.type){s+=40;why.push('職種一致')}
+  if(j.area===c.area||j.area==='リモート可'){s+=20;why.push('勤務地OK')}
+  if(c.salaryWant&&c.salaryWant<=j.max&&c.salaryWant>=j.min-50){s+=20;why.push('希望年収がレンジ内')}
+  var hit=(c.skills||[]).filter(function(k){return j.skills.indexOf(k)>=0});
+  s+=Math.min(20,hit.length*10);if(hit.length)why.push('スキル：'+hit.join('・'));
+  return {s:s,why:why};
+}
+
+/* ===== 画面 ===== */
+var VIEWS=[['home','ホーム'],['cands','求職者'],['board','選考ボード'],['jobs','求人・企業'],['prac','面接対策'],['deals','成約・請求'],['books','帳簿・レポート']];
+function go(v,p,tab){S.view=v;S.param=p||null;if(tab)S.tab=tab;save();render();window.scrollTo(0,0)}
+function openC(id,tab){go('cand',id,tab||'over')}
+function todos(){
+  var out=[];
+  S.C.forEach(function(c){if(c.next&&c.next.d&&diff(c.next.d)<=0)out.push({d:c.next.d,t:c.next.t,c:c})});
+  return out.sort(function(a,b){return a.d<b.d?-1:1});
+}
+function menuBadge(v){
+  var n=0;
+  if(v==='home')n=todos().length;
+  if(v==='cands')n=S.C.filter(function(c){return cstatus(c)==='新規問い合わせ'}).length+unread();
+  return n?'<span class="badge">'+n+'</span>':'';
+}
+function render(){
+  if(S.view==='cand'&&S.tab==='msg'){var ch=false;S.MSG.forEach(function(m){if(m.c===S.param&&m.from==='cand'&&!m.read){m.read=true;ch=true}});if(ch)save()}
+  document.getElementById('menu').innerHTML=VIEWS.map(function(v){var on=S.view===v[0]||(S.view==='cand'&&v[0]==='cands');return '<button class="'+(on?'on':'')+'" onclick="go(\''+v[0]+'\')"><span>'+v[1]+'</span>'+menuBadge(v[0])+'</button>'}).join('')+
+    '<div class="sep"></div><button class="site'+(S.view==='site'?' on':'')+'" onclick="go(\'site\')"><span>求職者サイト連携デモ</span></button>';
+  document.getElementById('who').innerHTML=STAFF.map(function(s){return '<option'+(s===S.me?' selected':'')+'>'+esc(s)+'</option>'}).join('');
+  document.getElementById('main').innerHTML=(V[S.view]||V.home)();
+  var th=document.querySelector('.main .card .thread');if(th)th.scrollTop=th.scrollHeight;
+}
+function topbar(title,extra){return '<div class="topbar"><h1><span class="mk">'+title+'</span></h1><span class="poc">POC・デモデータ</span>'+(extra||'')+'<button class="btn pri" onclick="newCand()">＋ 問い合わせ登録</button></div>'}
+
+var V={};
+V.home=function(){
+  var td=todos();
+  var mt=S.MTG.filter(function(m){return diff(m.d)>=0&&diff(m.d)<=1}).sort(function(a,b){return (a.d+a.t)<(b.d+b.t)?-1:1});
+  var ivs=S.AP.filter(function(a){return a.iv&&diff(a.iv.d)>=0&&diff(a.iv.d)<=7&&a.stage!==CLOSED}).sort(function(a,b){return a.iv.d<b.iv.d?-1:1});
+  var st=S.AP.filter(stale);
+  var inv=S.PL.filter(function(p){return p.inv==='未請求'});
+  var msgs=S.MSG.filter(function(m){return m.from==='cand'&&!m.read});
+  var sitein=S.C.filter(function(c){return diff(c.created)>=-30}).length;
+  var recs=S.AP.filter(function(a){return a.stage!=='推薦準備'}).length;
+  var offers=S.AP.filter(function(a){return si(a.stage)>=4}).length;
+  var dec=S.AP.filter(function(a){return si(a.stage)>=5}).length;
+  var rev=S.PL.reduce(function(s,p){return s+fee(p)},0);
+  var mine=td.filter(function(x){return x.c.owner===S.me}).length;
+  var h=topbar('おはようございます、'+esc(S.me.replace('（代表）',''))+'さん');
+  h+='<div class="grid g-kpi">'+
+    kpi('今日やること',td.length,'件','うち自分の担当 '+mine+'件')+
+    kpi('新規の相談',sitein,'人','直近30日（サイト・LINE含む）')+
+    kpi('推薦中の応募',recs,'件','見送りを含む累計')+
+    kpi('内定',offers,'件','承諾・入社を含む')+
+    kpi('売上見込み',Math.round(rev),'万円','成約 '+dec+'件の紹介手数料')+'</div>';
+  h+='<div class="grid g-2">';
+  h+='<section class="card pad"><div class="sec-h"><h2>今日やること・期限切れ</h2><span>求職者ごとの「次のアクション」から自動で集計</span></div><div class="list">'+
+     (td.length?td.map(function(x){var late=diff(x.d)<0;return '<div class="row clk" onclick="openC(\''+x.c.id+'\')"><span class="when '+(late?'late':'')+'">'+(late?rel(x.d):'今日')+'</span><div class="grow"><div class="t">'+esc(x.t)+'</div><div class="d">'+esc(x.c.name)+' ・ 担当 '+esc(x.c.owner)+'</div></div><button class="btn sm" onclick="event.stopPropagation();doneNext(\''+x.c.id+'\')">完了</button></div>'}).join(''):'<div class="empty">期限が来ているタスクはありません</div>')+'</div></section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>求職者からの新着・面談予定</h2><span>マイページのメッセージとサイトで予約された面談</span></div><div class="list">'+
+     msgs.map(function(m){var c=C(m.c);return '<div class="row clk" onclick="openC(\''+c.id+'\',\'msg\')"><span class="when">'+fd(m.d)+'<br>'+m.tm+'</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="d">'+esc(m.t)+'</div></div><span class="chip c-danger">未読</span></div>'}).join('')+
+     mt.map(function(m){var c=C(m.c);return '<div class="row clk" onclick="openC(\''+c.id+'\')"><span class="when">'+fd(m.d)+'<br>'+m.t+'</span><div class="grow"><div class="t">'+esc(c.name)+'　'+esc(m.kind)+'</div><div class="d">'+esc(m.how)+' ・ 担当 '+esc(m.owner)+'</div></div><span class="chip c-info">面談</span></div>'}).join('')+
+     (!msgs.length&&!mt.length?'<div class="empty">新着はありません</div>':'')+'</div></section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>今後7日の選考面接</h2><span>面接練習の実施状況つき</span></div><div class="list">'+
+     (ivs.length?ivs.map(function(a){var c=C(a.c),j=J(a.j),pr=(c.practice||[]).some(function(p){return p.job===a.j});return '<div class="row clk" onclick="openC(\''+c.id+'\',\'sel\')"><span class="when">'+fd(a.iv.d)+'<br>'+esc(a.iv.t)+'</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="d">'+esc(CO(j.co).name)+' ・ '+esc(a.iv.k)+'</div></div>'+(pr?'<span class="chip c-ok">練習済</span>':'<span class="chip c-warn">練習未実施</span>')+'</div>'}).join(''):'<div class="empty">予定なし</div>')+'</div></section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>止まっている選考</h2><span>7日以上ステータス更新なし</span></div><div class="list">'+
+     (st.length?st.map(function(a){var c=C(a.c),j=J(a.j);return '<div class="row clk" onclick="go(\'board\')"><span class="when late">'+(-diff(a.upd))+'日停滞</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="d">'+esc(CO(j.co).name)+' ・ '+esc(a.stage)+'</div></div><span class="chip c-warn">企業に確認</span></div>'}).join(''):'<div class="empty">停滞している選考はありません</div>')+'</div></section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>選考ファネル</h2><span>相談申し込みから入社まで</span></div>'+funnel()+'</section>';
+  if(inv.length)h+='<section class="card pad"><div class="sec-h"><h2>請求待ち</h2><span>内定承諾済み・未請求</span></div><div class="list">'+inv.map(function(p){var a=AP(p.app),c=C(a.c),j=J(a.j);return '<div class="row clk" onclick="go(\'deals\')"><span class="when">入社 '+fd(p.join)+'</span><div class="grow"><div class="t">'+esc(CO(j.co).name)+'</div><div class="d">'+esc(c.name)+' ・ 手数料 '+man(fee(p))+'（税抜）</div></div><span class="chip c-danger">未請求</span></div>'}).join('')+'</div></section>';
+  h+='</div>';
+  return h;
+};
+function kpi(l,v,u,s){return '<div class="card kpi"><span class="l">'+l+'</span><span class="v">'+v+'<small>'+u+'</small></span><span class="s">'+s+'</span></div>'}
+function fstats(cs){
+  var has=function(c,min){return appsOf(c.id).some(function(a){return a.hist.some(function(h){return si(h.s)>=min})||si(a.stage)>=min})};
+  return {all:cs.length,met:cs.filter(function(c){return ['新規問い合わせ','面談予約済'].indexOf(cstatus(c))<0}).length,
+    rec:cs.filter(function(c){return has(c,1)}).length,iv:cs.filter(function(c){return has(c,2)}).length,of:cs.filter(function(c){return has(c,4)}).length,dc:cs.filter(function(c){return has(c,5)}).length};
+}
+function funnel(){
+  var f=fstats(S.C);
+  var rows=[['相談申し込み',f.all],['面談実施',f.met],['推薦',f.rec],['面接',f.iv],['内定',f.of],['決定',f.dc]];
+  return '<div class="funnel">'+rows.map(function(r){return '<div class="fn"><span>'+r[0]+'</span><span class="bar"><i style="width:'+(f.all?r[1]/f.all*100:0)+'%"></i></span><span class="n">'+r[1]+'</span></div>'}).join('')+'</div><p class="note">相談→決定率 '+(f.all?Math.round(f.dc/f.all*100):0)+'%。Instagram・LINEなど流入経路別は「帳簿・レポート」で確認できます</p>';
+}
+function doneNext(id){var c=C(id);log(id,'完了：'+c.next.t);c.next={t:'',d:''};save();toast('完了にしました。次のアクションを設定しましょう');openC(id)}
+
+/* 求職者一覧 */
+V.cands=function(){
+  var q=(S.q||''),fs=S.fs||'',fo=S.fo||'';
+  var list=S.C.filter(function(c){var st=cstatus(c);return (!q||(c.name+c.kana+c.current+c.wantType).indexOf(q)>=0)&&(!fs||st===fs)&&(!fo||c.owner===fo)}).sort(function(a,b){return CSTAT.indexOf(cstatus(a))-CSTAT.indexOf(cstatus(b))});
+  var h=topbar('求職者');
+  h+='<div class="filters"><input type="search" id="q" placeholder="氏名・職種・現職で検索" value="'+esc(q)+'" oninput="S.q=this.value;rerenderKeep(\'q\')">'+
+     '<select id="fs" aria-label="ステータス" onchange="S.fs=this.value;render()"><option value="">すべてのステータス</option>'+CSTAT.map(function(s){return '<option'+(s===fs?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
+     '<select id="fo" aria-label="担当" onchange="S.fo=this.value;render()"><option value="">すべての担当</option>'+STAFF.map(function(s){return '<option'+(s===fo?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select><span class="note">'+list.length+'人</span></div>';
+  h+='<div class="card tbl-wrap"><table><thead><tr><th>氏名</th><th>ステータス</th><th>流入</th><th>希望職種</th><th>現職</th><th class="r">現年収→希望</th><th>担当</th><th>次のアクション</th></tr></thead><tbody>'+
+    list.map(function(c){var late=c.next&&c.next.d&&diff(c.next.d)<0,u=unread(c.id);return '<tr class="clk" onclick="openC(\''+c.id+'\''+(u?',\'msg\'':'')+')"><td><b>'+esc(c.name)+'</b>'+(u?' <span class="badge">'+u+'</span>':'')+'<div class="note">'+c.age+'歳 ・ 連絡：'+esc(c.contact)+'</div></td><td>'+stChip(cstatus(c))+'</td><td><span class="src">'+esc(src(c))+'</span></td><td>'+esc(c.wantType)+'</td><td>'+esc(c.current)+'</td><td class="r num">'+(c.salaryWant?c.salaryNow+'→'+c.salaryWant+'万':'—')+'</td><td>'+esc(c.owner)+'</td><td>'+(c.next&&c.next.t?'<span class="when '+(late?'late':'')+'">'+fd(c.next.d)+'</span> '+esc(c.next.t):'<span class="chip c-warn">未設定</span>')+'</td></tr>'}).join('')+'</tbody></table></div>';
+  return h;
+};
+function rerenderKeep(id){var el=document.getElementById(id),p=el.selectionStart;render();var n=document.getElementById(id);n.focus();try{n.setSelectionRange(p,p)}catch(e){}}
+
+/* 求職者詳細 */
+V.cand=function(){
+  var c=C(S.param);if(!c)return V.cands();
+  var st=cstatus(c),u=unread(c.id),tabs=[['over','概要'],['hear','ヒアリング'],['match','求人マッチング'],['sel','選考状況'],['prac','面接練習'],['msg','メッセージ'],['log','対応履歴']];
+  var h='<div class="topbar"><button class="btn ghost" onclick="go(\'cands\')">← 求職者一覧</button><span class="poc">POC・デモデータ</span><button class="btn sm" style="margin-left:auto" onclick="S.site.my=\''+c.id+'\';S.site.sv=\'my\';go(\'site\')">この人のマイページを見る</button></div>';
+  h+='<section class="card pad head-card"><div class="avatar">'+esc(c.name.charAt(0))+'</div><div style="flex:1;min-width:200px"><h1 style="font-size:22px">'+esc(c.name)+' <span class="note">'+esc(c.kana)+'</span></h1><div class="note">'+c.age+'歳 ・ '+esc(c.current)+' ・ 希望：'+esc(c.wantType)+'（'+esc(c.area)+'）</div></div><span class="src">'+esc(src(c))+'経由</span>'+stChip(st)+
+     '<label class="note" for="own">担当 <select id="own" onchange="C(\''+c.id+'\').owner=this.value;log(\''+c.id+'\',\'担当を\'+this.value+\'に変更\');save();render()">'+STAFF.map(function(s){return '<option'+(s===c.owner?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></label></section>';
+  h+='<div class="tabs" role="tablist">'+tabs.map(function(t){var n=t[0]==='sel'?' ('+appsOf(c.id).length+')':t[0]==='prac'?' ('+(c.practice||[]).length+')':'';return '<button role="tab" class="'+(S.tab===t[0]?'on':'')+'" onclick="S.tab=\''+t[0]+'\';save();render()">'+t[1]+n+(t[0]==='msg'&&u?' <span class="badge">'+u+'</span>':'')+'</button>'}).join('')+'</div>';
+  h+=(T[S.tab]||T.over)(c);
+  return h;
+};
+var T={};
+T.over=function(c){
+  var nx=c.next||{t:'',d:''},m=S.MTG.filter(function(x){return x.c===c.id&&diff(x.d)>=0})[0];
+  var h='<div class="grid g-2"><section class="card pad"><div class="sec-h"><h2>次のアクション</h2><span>ホームの「今日やること」に表示されます</span></div><div class="form"><label>内容<input type="text" id="nt" value="'+esc(nx.t)+'" placeholder="例：求人を3件紹介する"></label><div class="f2"><label>期限<input type="date" id="nd" value="'+esc(nx.d)+'"></label></div><div><button class="btn pri" onclick="saveNext(\''+c.id+'\')">保存</button></div></div>'+
+    (m?'<div class="s-card" style="margin-top:14px"><b>'+esc(m.kind)+'：'+fd(m.d)+' '+m.t+'</b><span class="note">'+esc(m.how)+' ・ 担当 '+esc(m.owner)+'</span></div>':'')+'</section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>基本情報</h2></div><dl class="dl"><dt>電話</dt><dd class="num">'+esc(c.phone)+'</dd><dt>メール</dt><dd>'+esc(c.email)+'</dd><dt>希望の連絡方法</dt><dd>'+esc(c.contact)+'</dd><dt>流入経路</dt><dd><span class="src">'+esc(src(c))+'</span></dd><dt>登録日</dt><dd>'+fd(c.created)+'（'+rel(c.created)+'）</dd><dt>年収</dt><dd class="num">'+(c.salaryWant?'現在 '+c.salaryNow+'万 → 希望 '+c.salaryWant+'万':'未ヒアリング')+'</dd><dt>スキル</dt><dd>'+((c.skills||[]).map(function(s){return '<span class="chip">'+esc(s)+'</span>'}).join(' ')||'—')+'</dd>'+
+    '<dt>提出書類</dt><dd>'+docChip('履歴書',c.docs.resume)+' '+docChip('職務経歴書',c.docs.cv)+'</dd>'+
+    '<dt>第三者提供の同意</dt><dd>'+((c.hearing||{}).consent?'<span class="chip c-ok">取得済み</span>':'<span class="chip c-danger">未取得（推薦前に必要）</span>')+'</dd></dl>'+
+    (!appsOf(c.id).length?'<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span class="note" style="align-self:center">ステータス：</span>'+['新規問い合わせ','面談予約済','面談済','休止'].map(function(s){return '<button class="btn sm'+(c.status===s?' pri':'')+'" onclick="setStatus(\''+c.id+'\',\''+s+'\')">'+s+'</button>'}).join('')+'</div>':'')+'</section></div>';
+  var ap=appsOf(c.id);
+  if(ap.length)h+='<section class="card pad"><div class="sec-h"><h2>応募中の求人</h2><span>詳細は「選考状況」タブ</span></div><div class="list">'+ap.map(appRow).join('')+'</div></section>';
+  return h;
+};
+function docChip(l,v){return v?'<span class="chip c-ok" title="'+esc(v)+'">'+l+' 提出済</span>':'<span class="chip c-warn">'+l+' 未提出</span>'}
+function appRow(a){var j=J(a.j),co=CO(j.co),x=a.stage===CLOSED,i=x?-1:si(a.stage);return '<div class="row"><div class="grow"><div class="t">'+esc(co.name)+'</div><div class="d">'+esc(j.title)+' ・ 更新 '+rel(a.upd)+'</div><div class="stagebar'+(x?' x':'')+'">'+STAGES.map(function(s,k){return '<i class="'+((x||k<=i)?'on':'')+'" title="'+s+'"></i>'}).join('')+'</div></div>'+intentChip(a)+stageChip(a.stage)+'</div>'}
+function saveNext(id){var c=C(id);c.next={t:document.getElementById('nt').value,d:document.getElementById('nd').value};log(id,'次のアクションを設定：'+c.next.t);save();render();toast('保存しました')}
+function setStatus(id,s){C(id).status=s;log(id,'ステータスを「'+s+'」に変更');save();render()}
+T.hear=function(c){
+  var x=c.hearing||{};
+  function f(k,l,ph){return '<label>'+l+'<textarea id="h_'+k+'" placeholder="'+ph+'">'+esc(x[k]||'')+'</textarea></label>'}
+  return '<section class="card pad"><div class="sec-h"><h2>ヒアリングシート</h2><span>サイトの申し込み内容が最初から入ります。面談で追記してください</span></div><div class="form">'+
+   '<div class="f2"><label>希望職種<select id="h_type">'+JOBTYPES.map(function(t){return '<option'+(t===c.wantType?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label><label>希望勤務地<select id="h_area">'+AREAS.map(function(t){return '<option'+(t===c.area?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label><label>現年収（万円）<input type="number" id="h_now" value="'+(c.salaryNow||'')+'"></label><label>希望年収（万円）<input type="number" id="h_sal" value="'+(c.salaryWant||'')+'"></label></div>'+
+   '<label>現職（会社の業種 / 職種）<input type="text" id="h_cur" value="'+esc(c.current)+'"></label>'+
+   f('reason','転職理由','例：土日休みの仕事に就きたい')+f('skill','経験・スキル・実績','例：月間目標を14ヶ月連続達成')+f('wish','希望条件','年収・働き方・エリアなど')+f('ng','NG条件','例：転勤、夜勤')+
+   '<div class="f2"><label>転職希望時期<select id="h_timing">'+['即時','3ヶ月以内','半年以内','良い求人があれば'].map(function(t){return '<option'+(t===x.timing?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label></div>'+
+   '<label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="h_consent"'+(x.consent?' checked':'')+'> 個人情報の第三者（応募企業）提供について本人の同意を得た</label>'+
+   '<div><button class="btn pri" onclick="saveHear(\''+c.id+'\')">ヒアリング内容を保存</button></div></div></section>';
+};
+function saveHear(id){var c=C(id),g=function(k){return document.getElementById('h_'+k)};c.hearing={reason:g('reason').value,skill:g('skill').value,wish:g('wish').value,ng:g('ng').value,timing:g('timing').value,consent:g('consent').checked};c.wantType=g('type').value;c.area=g('area').value;c.salaryWant=+g('sal').value||0;c.salaryNow=+g('now').value||0;c.current=g('cur').value;if(['新規問い合わせ','面談予約済'].indexOf(c.status)>=0)c.status='面談済';log(id,'ヒアリングシートを更新');save();render();toast('保存しました。「求人マッチング」で候補を確認できます')}
+T.match=function(c){
+  var js=S.J.filter(function(j){return j.open}).map(function(j){return {j:j,m:score(c,j)}}).sort(function(a,b){return b.m.s-a.m.s});
+  var applied=appsOf(c.id).map(function(a){return a.j});
+  return '<section class="card pad"><div class="sec-h"><h2>おすすめ求人</h2><span>紹介すると本人のマイページに表示され、'+esc(c.contact)+'で通知します</span></div><div class="list">'+
+   js.map(function(x){var j=x.j,co=CO(j.co),done=applied.indexOf(j.id)>=0;return '<div class="match"><div class="score"><span class="num" style="width:30px;text-align:right;font-weight:700">'+x.m.s+'</span><span class="bar"><i style="width:'+x.m.s+'%"></i></span></div><div class="grow"><div class="t">'+esc(co.name)+' ／ '+esc(j.title)+'</div><div class="d num">'+j.min+'〜'+j.max+'万 ・ '+esc(j.area)+' ・ 手数料 '+co.fee+'%</div><div class="why">'+x.m.why.map(function(w){return '<span class="chip c-acc">'+esc(w)+'</span>'}).join('')+'</div></div>'+(done?'<span class="chip c-ok">紹介済み</span>':'<button class="btn sm" onclick="recommend(\''+c.id+'\',\''+j.id+'\')">マイページで紹介</button>')+'</div>'}).join('')+'</div></section>';
+};
+function recommend(cid,jid){var c=C(cid);if(!(c.hearing||{}).consent){toast('先に「ヒアリング」で第三者提供の同意を記録してください');S.tab='hear';render();return}var j=J(jid);S.AP.push({id:uid('a'),c:cid,j:jid,stage:'推薦準備',upd:day(0),iv:null,intent:'未確認',hist:[{s:'推薦準備',d:day(0)}]});log(cid,CO(j.co).name+'「'+j.title+'」をマイページで紹介');notify(c,'新しい求人のご紹介「'+j.title+'」');save();render();toast('マイページに表示し、'+c.contact+'で通知しました')}
+T.sel=function(c){
+  var ap=appsOf(c.id);
+  if(!ap.length)return '<section class="card pad"><div class="empty">まだ応募はありません。「求人マッチング」から紹介できます。</div></section>';
+  return '<section class="card pad"><div class="sec-h"><h2>選考状況</h2><span>ステータスは本人のマイページにも反映されます</span></div><div class="list">'+ap.map(function(a){var j=J(a.j),co=CO(j.co);return '<div class="row" style="flex-wrap:wrap"><div class="grow" style="min-width:180px"><div class="t">'+esc(co.name)+'</div><div class="d">'+esc(j.title)+' ・ 更新 '+rel(a.upd)+(a.iv?' ・ 面接 '+fd(a.iv.d)+' '+esc(a.iv.t):'')+'</div></div>'+intentChip(a)+stageSelect(a)+'<button class="btn sm" onclick="ivModal(\''+a.id+'\')">面接日を設定</button></div>'}).join('')+'</div></section>';
+};
+function stageSelect(a){return '<select aria-label="選考ステータス" onchange="setStage(\''+a.id+'\',this.value)">'+STAGES.concat([CLOSED]).map(function(s){return '<option'+(s===a.stage?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'}
+function setStage(id,s){
+  var a=AP(id);if(a.stage===s)return;var j=J(a.j),c=C(a.c);
+  if(si(s)>=1&&!(c.hearing||{}).consent){toast('第三者提供の同意が未取得のため推薦できません');render();return}
+  if(si(s)>=1&&a.stage==='推薦準備'&&a.intent!=='応募したい'){toast('本人の応募意思がまだ確認できていません（マイページで「応募したい」が押されると進められます）');render();return}
+  a.stage=s;a.upd=day(0);a.hist.push({s:s,d:day(0)});if(si(s)<2||s===CLOSED)a.iv=null;
+  log(a.c,CO(j.co).name+'：'+s+'に更新');
+  var label={'書類選考':'書類選考に進みました','一次面接':'書類選考を通過しました','最終面接':'最終面接に進みました','内定':'内定のご連絡があります','承諾':'入社準備のご案内','見送り':'選考結果のご連絡'}[s];
+  if(label)notify(c,CO(j.co).name+' '+label);
+  if(si(s)>=5&&!S.PL.some(function(p){return p.app===id})){S.PL.push({app:id,salary:Math.round((j.min+j.max)/2),join:day(30),inv:'未請求'});toast('成約を登録しました。「成約・請求」で年収と入社日を確認してください')}else toast(c.name+'さん：'+s+'（本人に通知しました）');
+  save();render();
+}
+T.prac=function(c){
+  var ap=appsOf(c.id).filter(function(a){return a.stage!==CLOSED});
+  var h='<div class="grid g-2"><section class="card pad"><div class="sec-h"><h2>面接練習を記録</h2></div><div class="form"><div class="f2"><label>実施日<input type="date" id="p_d" value="'+day(0)+'"></label><label>対象の求人<select id="p_j">'+(ap.length?ap.map(function(a){var j=J(a.j);return '<option value="'+j.id+'">'+esc(CO(j.co).name)+'</option>'}).join(''):'<option value="">（一般練習）</option>')+'</select></label><label>評価<select id="p_s">'+[5,4,3,2,1].map(function(n){return '<option value="'+n+'"'+(n===3?' selected':'')+'>'+'★★★★★'.slice(0,n)+'</option>'}).join('')+'</select></label></div><label>良かった点<textarea id="p_g"></textarea></label><label>改善点・宿題<textarea id="p_b"></textarea></label><label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="p_sh" checked> 本人のマイページに共有する</label><div><button class="btn pri" onclick="addPrac(\''+c.id+'\')">記録する</button></div></div></section>';
+  h+='<section class="ai"><div class="sec-h"><h2>想定質問をつくる</h2><span class="chip c-acc">AI連携デモ</span></div><p class="note" style="margin:0">ヒアリング内容と求人票から、企業ごとの想定質問と回答のポイントを作ります。マイページに共有すると本人が事前に準備できます。</p><div class="filters" style="margin-top:10px"><select id="ai_j" aria-label="対象求人">'+(ap.length?ap.map(function(a){var j=J(a.j);return '<option value="'+j.id+'">'+esc(CO(j.co).name)+' ／ '+esc(j.title)+'</option>'}).join(''):S.J.slice(0,3).map(function(j){return '<option value="'+j.id+'">'+esc(CO(j.co).name)+'</option>'}).join(''))+'</select><button class="btn pri sm" onclick="genQ(\''+c.id+'\')">生成する</button></div><div id="aiout"></div></section></div>';
+  var ps=(c.practice||[]).slice().sort(function(a,b){return a.d<b.d?1:-1});
+  h+='<section class="card pad"><div class="sec-h"><h2>練習の記録</h2><span>'+ps.length+'回</span></div><div class="timeline">'+(ps.length?ps.map(function(p){var j=J(p.job);return '<div class="tl"><span class="w">'+fd(p.d)+'</span><div><b>'+(j?esc(CO(j.co).name):'一般練習')+'</b> <span class="stars">'+'★★★★★'.slice(0,p.score)+'</span> '+(p.shared?'<span class="chip c-acc">マイページ共有中</span>':'')+'<div class="note">良かった点：'+esc(p.good)+'</div><div class="note">改善点：'+esc(p.bad)+'</div></div></div>'}).join(''):'<div class="empty">まだ記録はありません</div>')+'</div></section>';
+  return h;
+};
+function addPrac(id){var c=C(id),g=function(k){return document.getElementById('p_'+k).value},sh=document.getElementById('p_sh').checked;c.practice.push({d:g('d'),job:g('j'),score:+g('s'),good:g('g'),bad:g('b'),shared:sh});log(id,'面接練習を実施（評価'+g('s')+'）');if(sh)notify(c,'面接練習のフィードバックをマイページに追加しました');save();render();toast('記録しました')}
+function questions(c,j){
+  var co=CO(j.co),x=c.hearing||{},hit=(c.skills||[]).filter(function(k){return j.skills.indexOf(k)>=0});
+  return [
+   ['数ある会社の中で、なぜ当社を選んだのですか？',co.name+'の事業・サービスに1つ具体的に触れる。「福岡で働きたい理由」もセットで'],
+   ['これまでの「'+c.current.split('/').pop().trim()+'」の経験は、'+j.title+'でどう活かせますか？',(x.skill?'「'+x.skill.slice(0,30)+'」を数字付きで話す':'実績を数字で1つ用意する')],
+   [hit.length?hit[0]+'で一番成果が出た取り組みを教えてください':'未経験の仕事をどうやって覚えていきますか？','状況→課題→行動→結果の順で1分以内にまとめる'],
+   ['転職を考えたきっかけは何ですか？',x.reason?'「'+x.reason.slice(0,24)+'」を前向きな言い方に変える（不満ではなく、やりたいこと起点で）':'前職批判にならない言い方を準備'],
+   ['入社後3年でどうなっていたいですか？',j.title+'としてのキャリアと、'+co.name+'で実現できる理由をつなげる'],
+   ['最後に何か質問はありますか？','配属チームの雰囲気・評価のされ方など、入社後を具体的に想像している質問を2つ']
+  ];
+}
+function genQ(cid){
+  var c=C(cid),j=J(document.getElementById('ai_j').value),q=questions(c,j);
+  document.getElementById('aiout').innerHTML='<ol>'+q.map(function(r){return '<li>'+esc(r[0])+'<small>回答のポイント：'+esc(r[1])+'</small></li>'}).join('')+'</ol><div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn sm" onclick="shareQ(\''+cid+'\',\''+j.id+'\')">マイページに共有</button><span class="note">※POCではテンプレートで生成。本格版ではAIが職務経歴書・求人票・過去の面接傾向から作成します</span></div>';
+}
+function shareQ(cid,jid){var c=C(cid);c.shareQ[jid]=true;log(cid,CO(J(jid).co).name+'の想定質問をマイページに共有');notify(c,'面接の想定質問をマイページに追加しました');save();toast('マイページに共有しました')}
+T.msg=function(c){
+  var ms=S.MSG.filter(function(m){return m.c===c.id});
+  return '<section class="card pad"><div class="sec-h"><h2>メッセージ</h2><span>本人のマイページとつながっています（'+esc(c.contact)+'にも通知）</span></div><div class="thread">'+(ms.length?ms.map(function(m){return '<div class="msg'+(m.from==='staff'?' me':'')+'">'+esc(m.t)+'<small>'+fd(m.d)+' '+m.tm+(m.from==='staff'?' ・ 担当':'')+'</small></div>'}).join(''):'<div class="empty">まだメッセージはありません</div>')+'</div><div class="filters" style="margin-top:10px"><input type="text" id="reply" placeholder="返信を入力" style="flex:1;min-width:200px" onkeydown="if(event.key===\'Enter\')sendStaff(\''+c.id+'\')"><button class="btn pri" onclick="sendStaff(\''+c.id+'\')">送信</button></div><div class="filters" style="margin-top:8px"><span class="note">定型文：</span>'+['面談のご予約ありがとうございます。当日はよろしくお願いします！','書類選考の結果が出ましたのでご連絡します。','面接おつかれさまでした！手応えはいかがでしたか？'].map(function(t){return '<button class="btn sm" onclick="document.getElementById(\'reply\').value=this.textContent">'+t+'</button>'}).join('')+'</div></section>';
+};
+function sendStaff(cid){var v=document.getElementById('reply').value.trim();if(!v)return;var c=C(cid);S.MSG.push({id:uid('g'),c:cid,from:'staff',d:day(0),tm:now(),t:v,read:true});notify(c,'担当からメッセージが届きました');save();render();toast('送信しました')}
+T.log=function(c){
+  var ls=S.LOG.filter(function(l){return l.c===c.id}).sort(function(a,b){return a.d<b.d?1:-1});
+  return '<section class="card pad"><div class="sec-h"><h2>対応履歴</h2><span>電話・面談のメモ。サイトからの申し込みや操作も自動で記録されます</span></div><div class="filters" style="margin-bottom:10px"><input type="text" id="memo" placeholder="例：電話。来週の面談日程を調整" style="flex:1;min-width:200px"><button class="btn pri" onclick="addMemo(\''+c.id+'\')">追加</button></div><div class="timeline">'+(ls.length?ls.map(function(l){return '<div class="tl"><span class="w">'+fd(l.d)+'</span><div>'+esc(l.t)+'<div class="note">'+esc(l.by)+'</div></div></div>'}).join(''):'<div class="empty">まだ履歴はありません</div>')+'</div></section>';
+};
+function addMemo(id){var v=document.getElementById('memo').value.trim();if(!v)return;log(id,v);save();render()}
+
+/* 選考ボード */
+var dragId=null;
+V.board=function(){
+  var fo=S.bo||'';
+  var ap=S.AP.filter(function(a){return !fo||C(a.c).owner===fo});
+  var h=topbar('選考ボード','<select id="bo" aria-label="担当で絞り込み" onchange="S.bo=this.value;render()"><option value="">全員の案件</option>'+STAFF.map(function(s){return '<option'+(s===fo?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select>');
+  h+='<p class="note" style="margin:0">カードをドラッグ、またはカード内のメニューで選考ステータスを変更。変更は本人のマイページに反映され、LINEなどで通知されます。7日以上動きがない案件は赤で表示します。</p>';
+  h+='<div class="board">'+STAGES.concat([CLOSED]).map(function(s){var cs=ap.filter(function(a){return a.stage===s});return '<div class="col'+(s===CLOSED?' closed':'')+'" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="this.classList.remove(\'over\');if(dragId)setStage(dragId,\''+s+'\')"><h3><span>'+s+'</span><span class="num">'+cs.length+'</span></h3>'+cs.map(card).join('')+'</div>'}).join('')+'</div>';
+  return h;
+};
+function card(a){var c=C(a.c),j=J(a.j),st=stale(a);return '<div class="kc" draggable="true" ondragstart="dragId=\''+a.id+'\'"><span class="t" onclick="openC(\''+c.id+'\',\'sel\')">'+esc(c.name)+'</span><span class="d">'+esc(CO(j.co).name)+'<br>'+esc(j.title)+'</span><div style="display:flex;gap:4px;flex-wrap:wrap">'+intentChip(a)+(a.iv?'<span class="chip c-info">面接 '+fd(a.iv.d)+'</span>':'')+(st?'<span class="chip c-danger">'+(-diff(a.upd))+'日停滞</span>':'<span class="chip">'+rel(a.upd)+'</span>')+'<span class="chip">'+esc(c.owner)+'</span></div>'+stageSelect(a)+'</div>'}
+function ivModal(id){var a=AP(id);modal('<h2>面接日を設定</h2><div class="form"><div class="f2"><label>日付<input type="date" id="iv_d" value="'+(a.iv?a.iv.d:day(3))+'"></label><label>時刻<input type="text" id="iv_t" value="'+(a.iv?esc(a.iv.t):'10:00')+'"></label><label>種別<select id="iv_k">'+['一次面接','二次面接','最終面接'].map(function(k){return '<option'+(a.iv&&a.iv.k===k?' selected':'')+'>'+k+'</option>'}).join('')+'</select></label></div><p class="note">保存すると本人のマイページに表示され、LINEで通知されます。本格版ではGoogleカレンダーにも自動登録します。</p></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveIv(\''+id+'\')">保存</button></div>')}
+function saveIv(id){var a=AP(id),c=C(a.c);a.iv={d:val('iv_d'),t:val('iv_t'),k:val('iv_k')};a.upd=day(0);var co=CO(J(a.j).co).name;log(a.c,co+' '+a.iv.k+'を'+fd(a.iv.d)+' '+a.iv.t+'に設定');notify(c,co+' '+a.iv.k+'の日程 '+fd(a.iv.d)+' '+a.iv.t);save();closeM();render();toast('面接日を設定し、本人に通知しました')}
+
+/* 求人・企業 */
+V.jobs=function(){
+  var tab=S.jt||'job';
+  var h=topbar('求人・企業','<button class="btn" onclick="newJob()">＋ 求人を追加</button>');
+  h+='<div class="tabs"><button class="'+(tab==='job'?'on':'')+'" onclick="S.jt=\'job\';render()">求人（'+S.J.length+'）</button><button class="'+(tab==='co'?'on':'')+'" onclick="S.jt=\'co\';render()">取引企業・契約（'+S.CO.length+'）</button></div>';
+  if(tab==='job'){
+    h+='<p class="note" style="margin:0">「サイト掲載」をオンにすると、求職者サイトの求人一覧に表示されます（企業名は伏せて掲載）。</p>';
+    h+='<div class="card tbl-wrap"><table><thead><tr><th>企業</th><th>求人</th><th>職種</th><th class="r">年収</th><th>勤務地</th><th>求めるスキル</th><th class="r">応募</th><th>募集</th><th>サイト掲載</th></tr></thead><tbody>'+S.J.map(function(j){var co=CO(j.co),n=S.AP.filter(function(a){return a.j===j.id&&a.stage!==CLOSED}).length;return '<tr><td>'+esc(co.name)+'</td><td><b>'+esc(j.title)+'</b>'+(j.hl?'<div class="note">'+esc(j.hl)+'</div>':'')+'</td><td>'+esc(j.type)+'</td><td class="r num">'+j.min+'〜'+j.max+'万</td><td>'+esc(j.area)+'</td><td>'+j.skills.map(function(s){return '<span class="chip">'+esc(s)+'</span>'}).join(' ')+'</td><td class="r num">'+n+'</td><td><button class="btn sm" onclick="tgl(\''+j.id+'\',\'open\')">'+(j.open?'募集中':'停止中')+'</button></td><td><button class="btn sm'+(j.pub?' pri':'')+'" onclick="tgl(\''+j.id+'\',\'pub\')">'+(j.pub?'掲載中':'非掲載')+'</button></td></tr>'}).join('')+'</tbody></table></div>';
+  }else{
+    h+='<div class="card tbl-wrap"><table><thead><tr><th>企業名</th><th>業種</th><th>担当窓口</th><th class="r">紹介手数料</th><th>返金規定</th><th>基本契約日</th><th class="r">求人</th><th class="r">決定</th></tr></thead><tbody>'+S.CO.map(function(co){var js=S.J.filter(function(j){return j.co===co.id}),d=S.AP.filter(function(a){return J(a.j).co===co.id&&si(a.stage)>=5}).length;return '<tr><td><b>'+esc(co.name)+'</b></td><td>'+esc(co.ind)+'</td><td>'+esc(co.contact)+'</td><td class="r num">理論年収の'+co.fee+'%</td><td>'+esc(co.refund)+'</td><td class="num">'+esc(co.contract)+'</td><td class="r num">'+js.length+'</td><td class="r num">'+d+'</td></tr>'}).join('')+'</tbody></table></div><p class="note">契約書PDFの保管・更新期限の通知は本格版で対応予定。</p>';
+  }
+  return h;
+};
+function tgl(id,k){var j=J(id);j[k]=!j[k];if(k==='pub')ev('out',(j[k]?'求職者サイトに求人を掲載：':'求職者サイトから求人を非掲載：')+j.title);save();render();if(k==='pub')toast(j.pub?'求職者サイトに掲載しました':'求職者サイトから外しました')}
+function newJob(){modal('<h2>求人を追加</h2><div class="form"><label>企業<select id="nj_co">'+S.CO.map(function(c){return '<option value="'+c.id+'">'+esc(c.name)+'</option>'}).join('')+'</select></label><label>求人タイトル<input type="text" id="nj_t" placeholder="例：インサイドセールス（未経験歓迎）"></label><label>アピールポイント（サイトに表示）<input type="text" id="nj_hl" placeholder="例：土日祝休み・天神駅直結"></label><div class="f2"><label>職種<select id="nj_type">'+JOBTYPES.map(function(t){return '<option>'+t+'</option>'}).join('')+'</select></label><label>勤務地<select id="nj_area">'+AREAS.map(function(t){return '<option>'+t+'</option>'}).join('')+'</select></label><label>年収下限（万）<input type="number" id="nj_min" value="300"></label><label>年収上限（万）<input type="number" id="nj_max" value="400"></label></div><label>求めるスキル（読点区切り）<input type="text" id="nj_sk" placeholder="法人営業、Excel"></label><label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink)"><input type="checkbox" id="nj_pub" checked> 求職者サイトに掲載する</label></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveJob()">追加</button></div>')}
+function saveJob(){var t=val('nj_t').trim();if(!t){toast('求人タイトルを入力してください');return}var pub=document.getElementById('nj_pub').checked;S.J.push({id:uid('j'),co:val('nj_co'),title:t,hl:val('nj_hl'),type:val('nj_type'),area:val('nj_area'),min:+val('nj_min'),max:+val('nj_max'),skills:val('nj_sk').split(/[、,]/).map(function(s){return s.trim()}).filter(Boolean),open:true,pub:pub});if(pub)ev('out','求職者サイトに求人を掲載：'+t);save();closeM();render();toast(pub?'求人を追加し、求職者サイトに掲載しました':'求人を追加しました')}
+
+/* 面接対策 */
+V.prac=function(){
+  var up=S.AP.filter(function(a){return a.iv&&diff(a.iv.d)>=0&&a.stage!==CLOSED}).sort(function(a,b){return a.iv.d<b.iv.d?-1:1});
+  var all=[];S.C.forEach(function(c){(c.practice||[]).forEach(function(p){all.push({c:c,p:p})})});all.sort(function(a,b){return a.p.d<b.p.d?1:-1});
+  var h=topbar('面接対策');
+  h+='<div class="grid g-2"><section class="card pad"><div class="sec-h"><h2>面接前の練習状況</h2><span>予定されている選考面接</span></div><div class="list">'+(up.length?up.map(function(a){var c=C(a.c),j=J(a.j),ps=(c.practice||[]).filter(function(p){return p.job===a.j});var last=ps.length?ps[ps.length-1]:null;return '<div class="row clk" onclick="openC(\''+c.id+'\',\'prac\')"><span class="when">'+fd(a.iv.d)+'<br>'+rel(a.iv.d)+'</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="d">'+esc(CO(j.co).name)+' ・ '+esc(a.iv.k)+'</div></div>'+(last?'<span class="stars">'+'★★★★★'.slice(0,last.score)+'</span>':'<span class="chip c-warn">練習未実施</span>')+'</div>'}).join(''):'<div class="empty">予定なし</div>')+'</div></section>';
+  h+='<section class="card pad"><div class="sec-h"><h2>最近の練習記録</h2></div><div class="timeline">'+(all.length?all.map(function(x){var j=J(x.p.job);return '<div class="tl clk" onclick="openC(\''+x.c.id+'\',\'prac\')"><span class="w">'+fd(x.p.d)+'</span><div><b>'+esc(x.c.name)+'</b> → '+(j?esc(CO(j.co).name):'一般')+' <span class="stars">'+'★★★★★'.slice(0,x.p.score)+'</span><div class="note">宿題：'+esc(x.p.bad)+'</div></div></div>'}).join(''):'<div class="empty">記録なし</div>')+'</div></section></div>';
+  h+='<section class="card pad"><div class="sec-h"><h2>企業別のよく聞かれる質問</h2><span>練習記録・面接後のヒアリングから蓄積する社内ナレッジ</span></div><div class="list">'+
+   [['株式会社はかたリンク','「当社サービスを使ってみた感想は？」が毎回出る。無料トライアルを事前に触ってもらう'],['株式会社ブライトHR福岡','最終は代表面接。人柄重視で「チームで揉めた経験」を深掘りされる'],['株式会社クラウドキュウシュウ','技術面接あり。設計判断の理由を口頭で説明させる形式']].map(function(r){return '<div class="row"><div class="grow"><div class="t">'+r[0]+'</div><div class="d">'+r[1]+'</div></div></div>'}).join('')+'</div></section>';
+  return h;
+};
+
+/* 成約・請求 */
+V.deals=function(){
+  var tot=0,inc=0;
+  var rows=S.PL.map(function(p){var a=AP(p.app),c=C(a.c),j=J(a.j),co=CO(j.co),f=fee(p);tot+=f;if(p.inv==='入金済')inc+=f;var m=co.refund.match(/(\d)ヶ月以内[^/]*$/);var months=m?+m[1]:3;var r=new Date(p.join+'T00:00:00');r.setMonth(r.getMonth()+months);var rd=iso(r);var inRefund=diff(p.join)<=0&&diff(rd)>=0;
+    return '<tr><td><b>'+esc(c.name)+'</b><div class="note">'+esc(c.owner)+'</div></td><td>'+esc(co.name)+'<div class="note">'+esc(j.title)+'</div></td><td><input type="date" aria-label="入社日" value="'+p.join+'" onchange="setPL(\''+p.app+'\',\'join\',this.value)"></td><td class="r"><input type="number" aria-label="理論年収" style="width:80px;text-align:right" value="'+p.salary+'" onchange="setPL(\''+p.app+'\',\'salary\',+this.value)"> 万</td><td class="r num">'+co.fee+'%</td><td class="r num">'+yen(f)+'</td><td class="r num">'+yen(f*1.1)+'</td><td><select aria-label="請求状況" onchange="setPL(\''+p.app+'\',\'inv\',this.value)">'+['未請求','請求済','入金済','返金対応'].map(function(s){return '<option'+(s===p.inv?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td><td>'+(inRefund?'<span class="chip c-warn">保証期間中〜'+fd(rd)+'</span>':diff(p.join)>0?'<span class="chip c-info">入社前</span>':'<span class="chip c-ok">期間終了</span>')+'<div class="note">'+esc(co.refund)+'</div></td></tr>'}).join('');
+  var h=topbar('成約・請求');
+  h+='<div class="grid g-kpi">'+kpi('成約',S.PL.length,'件','内定承諾〜入社')+kpi('紹介手数料（税抜）',Math.round(tot),'万円','見込み含む')+kpi('入金済',Math.round(inc),'万円','')+kpi('未回収',Math.round(tot-inc),'万円','請求前・請求済の合計')+'</div>';
+  h+='<div class="card tbl-wrap"><table><thead><tr><th>求職者</th><th>入社企業</th><th>入社日</th><th class="r">理論年収</th><th class="r">料率</th><th class="r">手数料（税抜）</th><th class="r">税込</th><th>請求状況</th><th>返金保証</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  h+='<p class="note">選考ボードで「承諾」にすると自動でここに追加されます。本格版では請求書PDFの発行、入金消込、返金発生時の自動計算に対応します。</p>';
+  return h;
+};
+function setPL(app,k,v){var p=S.PL.find(function(x){return x.app===app});p[k]=v;save();render();toast('更新しました')}
+
+/* 帳簿・レポート */
+V.books=function(){
+  var tab=S.bt||'src';
+  var h=topbar('帳簿・レポート');
+  h+='<p class="note" style="margin:0">有料職業紹介事業で備え付けが必要な帳簿を、日々の入力から自動で作成します（項目はサンプル。正式な記載事項は導入時に確認）。</p>';
+  h+='<div class="tabs">'+[['src','流入経路別'],['staff','担当者別'],['cand','求職管理簿'],['job','求人管理簿'],['fee','手数料管理簿']].map(function(t){return '<button class="'+(tab===t[0]?'on':'')+'" onclick="S.bt=\''+t[0]+'\';render()">'+t[1]+'</button>'}).join('')+'</div>';
+  var d=book(tab);
+  if(tab==='src')h+='<p class="note" style="margin:0">サイトURLの <span class="num">?utm_source=ig</span> などを申し込み時に自動で記録。どのSNS・広告から決定につながったかが分かります。</p>';
+  h+='<div class="card tbl-wrap"><table><thead><tr>'+d.head.map(function(x){return '<th>'+esc(x)+'</th>'}).join('')+'</tr></thead><tbody>'+d.rows.map(function(r){return '<tr>'+r.map(function(x){return '<td>'+esc(x)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>';
+  h+='<section class="card pad"><div class="sec-h"><h2>CSV</h2><span>Excelに貼り付けて使えます</span></div><textarea class="csv" id="csv" readonly aria-label="CSV">'+esc([d.head].concat(d.rows).map(function(r){return r.map(function(x){x=String(x);return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x}).join(',')}).join('\n'))+'</textarea><div style="margin-top:8px"><button class="btn" onclick="copyCsv()">CSVをコピー</button></div></section>';
+  return h;
+};
+function book(t){
+  if(t==='src')return {head:['流入経路','相談申し込み','面談実施','推薦','内定','決定','決定率','手数料見込み(万)'],rows:Object.keys(SOURCES).map(function(k){var cs=S.C.filter(function(c){return (c.source||'')===k}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [SOURCES[k],f.all,f.met,f.rec,f.of,f.dc,f.all?Math.round(f.dc/f.all*100)+'%':'—',Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
+  if(t==='cand')return {head:['受付日','氏名','年齢','希望職種','希望勤務地','希望年収(万)','紹介先','紹介日','結果','担当'],rows:S.C.map(function(c){var ap=appsOf(c.id);return [c.created,c.name,c.age,c.wantType,c.area,c.salaryWant||'—',ap.map(function(a){return CO(J(a.j).co).name}).join(' / ')||'—',ap.length?ap[0].hist[0].d:'—',ap.map(function(a){return a.stage}).join(' / ')||cstatus(c),c.owner]})};
+  if(t==='job')return {head:['求人者（企業）','求人内容','職種','勤務地','賃金(万)','紹介人数','採用人数','状態'],rows:S.J.map(function(j){var ap=S.AP.filter(function(a){return a.j===j.id});return [CO(j.co).name,j.title,j.type,j.area,j.min+'〜'+j.max,ap.length,ap.filter(function(a){return si(a.stage)>=5}).length,j.open?'募集中':'停止']})};
+  if(t==='fee')return {head:['求人者（企業）','就職者','入社日','理論年収(万)','料率','手数料(税抜・円)','請求状況'],rows:S.PL.map(function(p){var a=AP(p.app),j=J(a.j),co=CO(j.co);return [co.name,C(a.c).name,p.join,p.salary,co.fee+'%',Math.round(fee(p)*10000),p.inv]})};
+  return {head:['担当','担当求職者','面談済','推薦','内定','決定','手数料見込み(万)'],rows:STAFF.map(function(s){var cs=S.C.filter(function(c){return c.owner===s}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [s,f.all,f.met,f.rec,f.of,f.dc,Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
+}
+function copyCsv(){var t=document.getElementById('csv');var fb=function(){t.select();toast('選択しました。Ctrl+C（⌘C）でコピーしてください')};try{navigator.clipboard.writeText(t.value).then(function(){toast('コピーしました')},fb)}catch(e){fb()}}
+
+/* ===== 求職者サイト連携デモ ===== */
+var CSTEP={'推薦準備':'応募準備中','書類選考':'書類選考中','一次面接':'一次面接','最終面接':'最終面接','内定':'内定','承諾':'入社準備中','入社':'入社','見送り':'今回はご縁がありませんでした'};
+function freeSlots(){
+  var out=[],taken=S.MTG.map(function(m){return m.d+' '+m.t});
+  for(var i=1;i<=7&&out.length<8;i++){var d=day(i),w=new Date(d+'T00:00:00').getDay();if(w===0)continue;['10:00','13:00','19:00'].forEach(function(t){if(taken.indexOf(d+' '+t)<0&&out.length<8)out.push(d+' '+t)})}
+  return out;
+}
+V.site=function(){
+  var s=S.site;
+  var h='<div class="topbar"><h1>求職者サイト連携デモ</h1><span class="poc">POC・組み込みイメージ</span></div>';
+  h+='<p class="note" style="margin:0;max-width:72ch">左は求職者が見るスマホ画面（今のサイトに組み込むパーツ）、右はそれが社内の管理画面にどう届くかのログです。左で操作すると、管理画面の求職者・ホーム・選考ボードにそのまま反映されます。</p>';
+  h+='<div class="site-wrap"><div><div class="filters" style="margin-bottom:10px"><button class="btn sm'+(s.sv!=='my'?' pri':'')+'" onclick="sv(\'top\')">サイト（申し込み前）</button><button class="btn sm'+(s.sv==='my'?' pri':'')+'" onclick="sv(\'my\')">マイページ（登録後）</button></div>'+
+     '<div class="phone"><div class="ph-bar"><span class="s-logo"><small><em>転職</em>の無料相談なら</small>フッキャリ</span>'+(s.sv==='my'?'<select aria-label="デモで見る求職者" onchange="S.site.my=this.value;save();render()" style="font-size:12px;padding:3px 6px">'+S.C.map(function(c){return '<option value="'+c.id+'"'+(c.id===s.my?' selected':'')+'>'+esc(c.name)+'</option>'}).join('')+'</select>':'<span class="s-burger" aria-hidden="true"><i></i><i></i><i></i></span>')+'</div>'+(s.sv==='top'?'<div class="s-strip">20代の若手転職ならフッキャリ</div>':'')+'<div class="ph-body" id="phb">'+(SV[s.sv]||SV.top)()+'</div></div></div>';
+  h+='<section class="card pad"><div class="sec-h"><h2>管理画面に届いたこと</h2><span>新しい順</span></div><div class="feed">'+S.EV.slice(0,14).map(function(e,i){var lab={in:'サイト→社内',out:'社内→サイト',line:'LINE通知'}[e.dir];return '<div class="ev'+(i===0&&s.flash?' flash':'')+'"><span class="dir '+e.dir+'">'+lab+'</span><div>'+esc(e.t)+'<div class="note">'+fd(e.d)+' '+e.tm+(e.c&&C(e.c)?' ・ <a href="#" onclick="event.preventDefault();openC(\''+e.c+'\')">管理画面で見る</a>':'')+'</div></div></div>'}).join('')+'</div>'+
+     '<div class="s-card" style="margin-top:14px"><b>本番での連携方法（案）</b><span class="note">① サイトの「無料相談」フォームの送信先をこのシステムに変更（またはフォームを埋め込み）② 求人一覧はこのシステムで「サイト掲載」にした求人を自動表示 ③ 申し込み後はLINE公式アカウントとマイページで連絡 ④ URLの <span class="num">utm_source</span> で流入経路を自動記録</span></div></section></div>';
+  S.site.flash=null;
+  return h;
+};
+function sv(v,job){S.site.sv=v;if(job!==undefined)S.site.job=job;save();render();var b=document.getElementById('phb');if(b)b.scrollTop=0}
+var SV={};
+SV.top=function(){
+  var js=S.J.filter(function(j){return j.pub&&j.open});
+  return '<div class="s-hero"><span class="s-balloon">1秒でも早く！</span><h2>なりたい自分に<br>会いに行く！</h2></div>'+
+   '<div class="s-cta"><div class="s-yel">あなたにぴったりの転職アドバイザーが内定まで徹底サポート！</div><span class="s-free">ご相談から内定まで、完全無料！</span>'+
+   '<button class="s-btn line" onclick="lineAdd()"><span class="lic">LINE</span>今すぐLINEで無料相談</button><button class="s-btn sub" onclick="sv(\'form\',null)">Webで面談日時を予約する</button><span class="note" style="text-align:center">どちらから始めても、社内の管理画面に自動で登録されます</span></div>'+
+   '<div class="s-sec"><h3>サービスの流れ</h3><div class="s-steps"><span><i>1</i>無料相談</span><span><i>2</i>求人紹介</span><span><i>3</i>面接対策</span><span><i>4</i>内定</span></div></div>'+
+   '<div class="s-sec" style="padding-top:4px"><h3>ピックアップ求人</h3><span class="note">管理画面で「サイト掲載」にした求人が自動で並びます（'+js.length+'件）</span>'+
+   (js.length?js.map(function(j){return '<div class="s-job"><div class="s-job-h">'+esc(j.hl||'おすすめ求人')+'</div><div class="s-job-b"><b>'+esc(j.title)+'</b><span class="d">'+esc(CO(j.co).ind)+'の企業 ・ '+esc(j.area)+' ・ 年収'+j.min+'〜'+j.max+'万円</span><button class="s-btn sub" style="margin-top:8px;padding:9px" onclick="sv(\'form\',\''+j.id+'\')">この求人について相談する</button></div></div>'}).join(''):'<div class="empty">掲載中の求人はありません</div>')+'</div>';
+};
+function lineAdd(){
+  var names=['はるか','ゆうと','みお','そうた','あかり'],nm=names[Math.floor(Math.random()*names.length)],owner=STAFF[1+Math.floor(Math.random()*4)];
+  var c={id:uid('c'),name:'LINE新規（'+nm+'）',kana:'',age:0,phone:'',email:'',current:'（未ヒアリング）',wantType:JOBTYPES[0],area:AREAS[0],salaryNow:0,salaryWant:0,skills:[],owner:owner,source:'line',created:day(0),status:'新規問い合わせ',contact:'LINE',hearing:{},practice:[],docs:{resume:'',cv:''},shareQ:{},next:{t:'LINEで氏名・希望職種をヒアリングし、面談日を決める',d:day(0)}};
+  S.C.push(c);log(c.id,'LINE公式アカウントを友だち追加（表示名：'+nm+'）。自動応答で面談予約リンクを送信','LINE');
+  ev('in','LINEで友だち追加（表示名：'+nm+'）→ 求職者に仮登録・担当 '+owner+'。自動応答で面談予約リンクを送信',c.id);
+  S.site.flash=true;save();render();toast('本番ではLINEが開きます。デモでは友だち追加として登録しました');
+}
+SV.form=function(){
+  var s=S.site,j=s.job?J(s.job):null,sl=freeSlots();
+  return '<div class="s-sec"><button class="btn sm ghost" style="align-self:flex-start;padding-left:0" onclick="sv(\'top\')">← 戻る</button><h3>無料相談のお申し込み</h3><span class="note">60秒で完了。面談の日時もここで選べます。</span>'+
+   (j?'<div class="s-card"><span class="note">相談したい求人</span><b>'+esc(j.title)+'</b></div>':'')+
+   '<div class="form s-panel"><label>お名前<input type="text" id="sf_name" placeholder="例：福岡 花子"></label><div class="f2"><label>年齢<input type="number" id="sf_age" value="25"></label><label>電話番号<input type="tel" id="sf_tel" placeholder="090-0000-0000"></label></div><label>メールアドレス<input type="email" id="sf_mail"></label>'+
+   '<label>希望の職種<select id="sf_type">'+JOBTYPES.map(function(t){return '<option'+(j&&j.type===t?' selected':'')+'>'+t+'</option>'}).join('')+'<option>まだ決めていない</option></select></label><label>希望の勤務地<select id="sf_area">'+AREAS.map(function(t){return '<option'+(j&&j.area===t?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label>'+
+   '<label>連絡の受け取り方<select id="sf_contact"><option>LINE</option><option>電話</option><option>メール</option></select></label>'+
+   '<label>面談の希望日時（オンライン or 天神オフィス）<div class="slots">'+sl.map(function(x){var p=x.split(' ');return '<button type="button" class="slot'+(s.slot===x?' on':'')+'" onclick="S.site.slot=\''+x+'\';keepForm()">'+fd(p[0])+' '+p[1]+'</button>'}).join('')+'</div></label>'+
+   '<label>相談したいこと（任意）<textarea id="sf_memo" placeholder="例：未経験から事務職に挑戦したい"></textarea></label>'+
+   '<div class="s-card"><span class="note">このページを開いたURL（デモ用に切り替え）</span><select id="sf_utm" aria-label="流入元" onchange="S.site.utm=this.value;keepForm()">'+Object.keys(SOURCES).map(function(k){return '<option value="'+k+'"'+(k===s.utm?' selected':'')+'>'+(k?'fuccari.net/?utm_source='+k:'fuccari.net/')+'</option>'}).join('')+'</select><span class="note">→ 流入経路「'+esc(SOURCES[s.utm])+'」として自動記録</span></div>'+
+   '<label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:400"><input type="checkbox" id="sf_ok"> 利用規約・個人情報の取り扱いに同意する</label>'+
+   '<button class="s-btn" onclick="submitSite()">この内容で申し込む</button></div></div>';
+};
+function keepForm(){var ids=['sf_name','sf_age','sf_tel','sf_mail','sf_type','sf_area','sf_contact','sf_memo'],v={};ids.forEach(function(i){v[i]=val(i)});var ok=document.getElementById('sf_ok').checked,y=document.getElementById('phb').scrollTop;save();render();ids.forEach(function(i){document.getElementById(i).value=v[i]});document.getElementById('sf_ok').checked=ok;document.getElementById('phb').scrollTop=y}
+function submitSite(){
+  var s=S.site,n=val('sf_name').trim();
+  if(!n){toast('お名前を入力してください');return}
+  if(!document.getElementById('sf_ok').checked){toast('利用規約・個人情報の取り扱いへの同意が必要です');return}
+  var type=val('sf_type'),owner=STAFF[1+Math.floor(Math.random()*4)],contact=val('sf_contact');
+  var c={id:uid('c'),name:n,kana:'',age:+val('sf_age'),phone:val('sf_tel'),email:val('sf_mail'),current:'（未ヒアリング）',wantType:type==='まだ決めていない'?JOBTYPES[0]:type,area:val('sf_area'),salaryNow:0,salaryWant:0,skills:[],owner:owner,source:s.utm,created:day(0),status:s.slot?'面談予約済':'新規問い合わせ',contact:contact,hearing:{},practice:[],docs:{resume:'',cv:''},shareQ:{},
+    next:s.slot?{t:'面談前に'+contact+'で挨拶・持ち物の案内',d:day(0)}:{t:'初回連絡（面談日程の調整）',d:day(0)}};
+  S.C.push(c);
+  var memo=val('sf_memo');
+  log(c.id,'サイトから無料相談を申し込み（'+SOURCES[s.utm]+'経由）'+(s.job?'。相談したい求人：'+J(s.job).title:'')+(memo?'。内容：'+memo:''),'サイト');
+  if(s.slot){var p=s.slot.split(' ');S.MTG.push({id:uid('m'),c:c.id,d:p[0],t:p[1],owner:owner,how:'オンライン（Zoom）',kind:'初回面談'})}
+  ev('in',n+'さんがサイトから無料相談を申し込み（'+SOURCES[s.utm]+'経由）→ 求職者に自動登録・担当 '+owner+(s.slot?'・面談 '+fd(s.slot.split(' ')[0])+' '+s.slot.split(' ')[1]+' を確定':''),c.id);
+  notify(c,'お申し込みありがとうございます。'+(s.slot?'面談日時のご確認':'担当より日程のご連絡をします'));
+  S.site.slot=null;S.site.job=null;S.site.my=c.id;S.site.sv='done';S.site.flash=true;save();render();
+}
+SV.done=function(){var c=C(S.site.my);return '<div class="s-sec" style="text-align:center;gap:14px;padding-top:40px"><h3>お申し込みを受け付けました</h3><p class="note" style="margin:0">'+esc(c?c.name:'')+'さん、ありがとうございます。担当アドバイザーから'+esc(c?c.contact:'')+'でご連絡します。</p><button class="s-btn" onclick="sv(\'my\')">マイページを見る</button><button class="s-btn sub" onclick="openC(\''+(c?c.id:'')+'\')">（社内側）管理画面で確認する</button></div>'};
+SV.my=function(){
+  var c=C(S.site.my);if(!c)return '<div class="empty">求職者を選んでください</div>';
+  var ap=appsOf(c.id),mt=S.MTG.filter(function(m){return m.c===c.id&&diff(m.d)>=0})[0];
+  var nexts=[];if(mt)nexts.push([mt.d,mt.t,mt.kind+'（'+mt.how+'）']);ap.forEach(function(a){if(a.iv&&diff(a.iv.d)>=0&&a.stage!==CLOSED)nexts.push([a.iv.d,a.iv.t,CO(J(a.j).co).name+' '+a.iv.k])});nexts.sort();
+  var newJobs=ap.filter(function(a){return a.stage==='推薦準備'&&a.intent==='未確認'});
+  var cur=ap.filter(function(a){return !(a.stage==='推薦準備'&&a.intent==='未確認')&&a.intent!=='見送り希望'});
+  var ms=S.MSG.filter(function(m){return m.c===c.id}).slice(-4);
+  var pr=(c.practice||[]).filter(function(p){return p.shared});
+  var qj=Object.keys(c.shareQ||{});
+  var h='<div class="s-hero" style="padding:18px"><h2 style="font-size:21px;font-style:normal">こんにちは、'+esc(c.name.split(' ').pop()||c.name)+'さん</h2><p>担当アドバイザー：'+esc(c.owner)+'</p></div>';
+  h+='<div class="s-sec"><h3>次の予定</h3>'+(nexts.length?nexts.map(function(n){return '<div class="s-card"><b>'+fd(n[0])+' '+esc(n[1])+'</b><span class="note">'+esc(n[2])+'</span></div>'}).join(''):'<div class="s-card"><span class="note">予定はまだありません</span>'+(cstatus(c)==='新規問い合わせ'?'<button class="s-btn sub" onclick="bookMy(\''+c.id+'\')">面談日時を予約する</button>':'')+'</div>')+'</div>';
+  if(newJobs.length)h+='<div class="s-sec"><h3>アドバイザーからの求人紹介 <span class="badge">'+newJobs.length+'</span></h3>'+newJobs.map(function(a){var j=J(a.j);return '<div class="s-job"><div class="s-job-h">'+esc(j.hl||'アドバイザーのおすすめ')+'</div><div class="s-job-b"><b>'+esc(j.title)+'</b><span class="d">'+esc(CO(j.co).ind)+'の企業 ・ '+esc(j.area)+' ・ 年収'+j.min+'〜'+j.max+'万円</span><div style="display:flex;gap:8px;margin-top:8px"><button class="s-btn" style="flex:1;padding:8px" onclick="answer(\''+a.id+'\',\'応募したい\')">応募したい</button><button class="s-btn sub" style="flex:1;padding:8px" onclick="answer(\''+a.id+'\',\'見送り希望\')">今回は見送る</button></div></div></div>'}).join('')+'</div>';
+  h+='<div class="s-sec"><h3>選考の状況</h3>'+(cur.length?cur.map(function(a){var j=J(a.j),x=a.stage===CLOSED,i=si(a.stage);return '<div class="s-card"><b>'+esc(CO(j.co).name)+'</b><span class="note">'+esc(j.title)+'</span><div class="s-prog">'+STAGES.slice(0,6).map(function(s,k){return '<i class="'+(!x&&k<=i?'on':'')+'"></i>'}).join('')+'</div><span style="font-weight:700;font-size:13px">'+esc(CSTEP[a.stage])+(a.stage==='推薦準備'?'（アドバイザーが推薦文を準備しています）':'')+'</span></div>'}).join(''):'<div class="s-card"><span class="note">まだ応募中の求人はありません</span></div>')+'</div>';
+  if(pr.length||qj.length)h+='<div class="s-sec"><h3>面接対策</h3>'+pr.map(function(p){var j=J(p.job);return '<div class="s-card"><span class="s-rib">面接練習</span><b>'+(j?esc(CO(j.co).name)+' の練習':'面接練習')+'（'+fd(p.d)+'）</b><span class="note">よかった点：'+esc(p.good)+'</span><span style="font-size:13px">次までの宿題：'+esc(p.bad)+'</span></div>'}).join('')+qj.map(function(jid){var j=J(jid);return '<div class="s-card"><span class="s-rib">想定質問</span><b>'+esc(CO(j.co).name)+'</b>'+questions(c,j).slice(0,4).map(function(q){return '<span style="font-size:13px">・'+esc(q[0])+'</span>'}).join('')+'</div>'}).join('')+'</div>';
+  h+='<div class="s-sec"><h3>提出書類</h3>'+[['resume','履歴書'],['cv','職務経歴書']].map(function(d){var v=c.docs[d[0]];return '<div class="s-card" style="flex-direction:row;align-items:center;justify-content:space-between"><span><b>'+d[1]+'</b><br><span class="note">'+(v?esc(v)+'（提出済）':'未提出')+'</span></span><label class="s-btn sub" style="padding:6px 12px;font-size:12px" for="up_'+d[0]+'">'+(v?'差し替え':'アップロード')+'</label><input type="file" id="up_'+d[0]+'" hidden onchange="upDoc(\''+c.id+'\',\''+d[0]+'\',this)"></div>'}).join('')+'<span class="note">書き方がわからなくても大丈夫。アドバイザーが添削します。</span></div>';
+  h+='<div class="s-sec"><h3>アドバイザーとのやりとり</h3><div class="thread" style="max-height:none">'+(ms.length?ms.map(function(m){return '<div class="msg'+(m.from==='cand'?' me':'')+'">'+esc(m.t)+'<small>'+fd(m.d)+' '+m.tm+'</small></div>'}).join(''):'<span class="note">まだメッセージはありません</span>')+'</div><div style="display:flex;gap:6px"><input type="text" id="my_msg" aria-label="メッセージ" placeholder="メッセージを入力" style="flex:1"><button class="s-btn" style="padding:8px 14px" onclick="sendCand(\''+c.id+'\')">送信</button></div></div>';
+  return h;
+};
+function answer(aid,v){var a=AP(aid),c=C(a.c),j=J(a.j);a.intent=v;a.upd=day(0);if(v==='見送り希望'){a.stage=CLOSED;a.hist.push({s:CLOSED,d:day(0)})}
+  log(c.id,'マイページで「'+j.title+'」に'+(v==='応募したい'?'応募したいと回答':'今回は見送ると回答'),'本人（マイページ）');
+  if(v==='応募したい')c.next={t:CO(j.co).name+'への推薦文を作成して送る',d:day(0)};
+  ev('in',c.name+'さんがマイページで「'+j.title+'」に'+(v==='応募したい'?'応募したいと回答 → 担当の今日やることに「推薦文の作成」を追加':'見送りと回答 → 選考ボードで見送りに移動'),c.id);
+  S.site.flash=true;save();render();toast(v==='応募したい'?'担当アドバイザーに伝えました':'承知しました。他の求人もご紹介しますね')}
+function sendCand(cid){var v=val('my_msg').trim();if(!v)return;var c=C(cid);S.MSG.push({id:uid('g'),c:cid,from:'cand',d:day(0),tm:now(),t:v,read:false});ev('in',c.name+'さんがマイページからメッセージを送信 → 管理画面に未読バッジ',cid);S.site.flash=true;save();render();toast('送信しました')}
+function upDoc(cid,k,el){var f=el.files&&el.files[0];if(!f)return;var c=C(cid),l=k==='resume'?'履歴書':'職務経歴書';c.docs[k]=f.name;log(cid,l+'を提出：'+f.name,'本人（マイページ）');ev('in',c.name+'さんが'+l+'を提出（'+f.name+'）',cid);S.site.flash=true;save();render();toast('提出しました（デモではファイル名のみ記録）')}
+function bookMy(cid){var sl=freeSlots();modal('<h2>面談日時を予約</h2><div class="slots">'+sl.map(function(x){var p=x.split(' ');return '<button class="slot" onclick="doBook(\''+cid+'\',\''+x+'\')">'+fd(p[0])+' '+p[1]+'</button>'}).join('')+'</div><div class="acts"><button class="btn" onclick="closeM()">閉じる</button></div>')}
+function doBook(cid,x){var c=C(cid),p=x.split(' ');S.MTG.push({id:uid('m'),c:cid,d:p[0],t:p[1],owner:c.owner,how:'オンライン（Zoom）',kind:'初回面談'});c.status='面談予約済';c.next={t:'面談前に'+c.contact+'で挨拶・持ち物の案内',d:day(0)};log(cid,'マイページで面談を予約：'+fd(p[0])+' '+p[1],'本人（マイページ）');ev('in',c.name+'さんが面談を予約（'+fd(p[0])+' '+p[1]+'）→ 担当 '+c.owner+' の予定に追加',cid);S.site.flash=true;save();closeM();render();toast('予約しました')}
+
+/* 問い合わせ登録（電話など、サイト以外の受付） */
+function newCand(){modal('<h2>問い合わせを登録</h2><p class="note" style="margin:0">電話・紹介などサイト以外の受付用です。サイトからの申し込みは自動で登録されます。</p><div class="form"><div class="f2"><label>氏名<input type="text" id="n_name" placeholder="例：福岡 太郎"></label><label>ふりがな<input type="text" id="n_kana"></label><label>年齢<input type="number" id="n_age" value="25"></label></div><div class="f2"><label>電話<input type="tel" id="n_tel"></label><label>メール<input type="email" id="n_mail"></label></div><div class="f2"><label>希望職種<select id="n_type">'+JOBTYPES.map(function(t){return '<option>'+t+'</option>'}).join('')+'</select></label><label>流入経路<select id="n_src"><option value="">直接・その他</option><option value="ig">Instagram</option><option value="line">LINE</option><option value="tiktok">TikTok</option><option value="google">Google検索</option></select></label><label>担当<select id="n_own">'+STAFF.map(function(s){return '<option'+(s===S.me?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></label></div><label>問い合わせ内容<textarea id="n_memo" placeholder="例：営業職への転職を考えています"></textarea></label></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveCand()">登録して初回連絡をタスク化</button></div>')}
+function saveCand(){var n=val('n_name').trim();if(!n){toast('氏名を入力してください');return}var c={id:uid('c'),name:n,kana:val('n_kana'),age:+val('n_age'),phone:val('n_tel'),email:val('n_mail'),current:'（未ヒアリング）',wantType:val('n_type'),area:'天神・博多',salaryNow:0,salaryWant:0,skills:[],owner:val('n_own'),source:val('n_src'),created:day(0),status:'新規問い合わせ',contact:'電話',next:{t:'初回連絡（電話）',d:day(0)},hearing:{},practice:[],docs:{resume:'',cv:''},shareQ:{}};S.C.push(c);log(c.id,'問い合わせ受付'+(val('n_memo')?'：'+val('n_memo'):''));save();closeM();openC(c.id);toast('登録しました。今日やることに「初回連絡」を追加しました')}
+
+/* 共通UI */
+function val(id){var e=document.getElementById(id);return e?e.value:''}
+function modal(html){document.getElementById('layer').innerHTML='<div class="modal-bg" onclick="if(event.target===this)closeM()"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';var f=document.querySelector('.modal input,.modal select,.modal button');if(f)f.focus()}
+function closeM(){document.getElementById('layer').innerHTML=''}
+var tt;function toast(m){clearTimeout(tt);var el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=m;tt=setTimeout(function(){el.remove()},2800)}
+function askReset(){modal('<h2>デモデータに戻しますか？</h2><p style="margin:0">このブラウザで入力した内容はすべて消え、最初のサンプル状態に戻ります。</p><div class="acts"><button class="btn" onclick="closeM()">やめる</button><button class="btn pri" onclick="doReset()">戻す</button></div>')}
+function doReset(){S=seed();save();closeM();render();toast('デモデータに戻しました')}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
+render();
+</script>
