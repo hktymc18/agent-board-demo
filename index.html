@@ -183,6 +183,8 @@ td.r,th.r{text-align:right}
 .pi .s{font-size:12px;color:var(--muted)}
 .band-mint .pb{background:var(--surface)}
 .stage-row .sub{font-size:12px;color:var(--muted)}
+.cmp-h{font-size:16px;margin:26px 0 10px;color:var(--ink)}
+.cmp-lead{font-size:14px;color:var(--muted);margin-bottom:10px}
 /* プラン */
 .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
 .plan{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0;border:2px solid transparent}
@@ -405,6 +407,7 @@ td.r,th.r{text-align:right}
 <section>
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">COMPARISON</span><h2>他のサービスとの<span class="mk">総額比較</span></h2><p>月額型のサービスは、人数が増えるほど費用が増えます。AgentBoardは人数が増えても保守費は変わりません。</p></div>
+    <h3 class="cmp-h">月額型のサービスとの比較</h3>
     <div class="card tbl-wrap"><table class="cmp"><thead><tr><th>サービス</th><th>費用の形</th><th class="num">3年間の総額</th><th class="num">5年間の総額</th></tr></thead><tbody>
       <tr><td>PORTERS（5名）</td><td>1人月1.5万円＋初期10万円、導入コンサル費は別途</td><td class="num">約280万円〜</td><td class="num">約460万円〜</td></tr>
       <tr><td>PORTERS（10名）</td><td>同上</td><td class="num">約550万円〜</td><td class="num">約910万円〜</td></tr>
@@ -412,6 +415,15 @@ td.r,th.r{text-align:right}
       <tr class="ours"><td>AgentBoard スタンダード</td><td>300万円＋保守 年36万円（人数は問わず）</td><td class="num">372万円</td><td class="num">444万円</td></tr>
     </tbody></table></div>
     <p class="note" style="margin-top:8px">PORTERSの料金は同社の製品資料（2026年11月時点）の掲載額をもとにした概算で、導入コンサルティング費用は含みません。税別。</p>
+    <h3 class="cmp-h">自社専用のシステムを開発会社に頼んだ場合との比較</h3>
+    <p class="cmp-lead">同じ規模のシステム（スタンダードプランの内容）を一から開発すると、約11人月（2〜3人のチームで4〜6か月）の作業量です。</p>
+    <div class="card tbl-wrap"><table class="cmp"><thead><tr><th>依頼先</th><th class="num">1人月の単価</th><th class="num">開発費</th><th class="num">保守（年）</th><th>期間の目安</th></tr></thead><tbody>
+      <tr><td>大手のシステム会社</td><td class="num">120万〜150万円以上</td><td class="num">1,300万〜2,000万円</td><td class="num">130万〜300万円</td><td>4〜6か月</td></tr>
+      <tr><td>中小の受託開発会社</td><td class="num">80万〜120万円</td><td class="num">900万〜1,500万円</td><td class="num">90万〜220万円</td><td>4〜6か月</td></tr>
+      <tr><td>フリーランス（個人）</td><td class="num">60万〜90万円</td><td class="num">650万〜1,000万円</td><td class="num">65万〜150万円</td><td>8か月以上</td></tr>
+      <tr class="ours"><td>AgentBoard スタンダード</td><td class="num">—</td><td class="num">300万円</td><td class="num">36万円（2年目以降）</td><td>第1段階 約6〜8週間</td></tr>
+    </tbody></table></div>
+    <p class="note" style="margin-top:8px">開発費・保守は一般的な受託開発の相場をもとにした当社試算です（保守は開発費の年10〜15%）。AgentBoardは、すでにある仕組みをもとに御社向けに仕上げるため、一から作る場合の4分の1前後の費用で導入できます。税別。</p>
   </div>
 </section>
 
