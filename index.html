@@ -181,6 +181,8 @@ td.r,th.r{text-align:right}
 .pi .v{font-family:var(--f-num);font-size:34px;font-weight:600;line-height:1.2;color:var(--accent)}
 .pi .v small{font-family:var(--f-body);font-size:15px;color:var(--ink);margin-left:4px}
 .pi .s{font-size:12px;color:var(--muted)}
+.band-mint .pb{background:var(--surface)}
+.stage-row .sub{font-size:12px;color:var(--muted)}
 /* プラン */
 .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
 .plan{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0;border:2px solid transparent}
@@ -264,9 +266,9 @@ td.r,th.r{text-align:right}
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">AFTER</span><h2>導入すると、<span class="mk">1日の動き方</span>が変わります</h2></div>
     <div class="ba">
-      <div class="col before"><h3>いま（Excel＋LINE個別対応）</h3><ul><li>朝、Excelとトーク履歴を見比べて今日やることを探す</li><li>相談が来たらシートに転記し、空いている人に口頭で振る</li><li>面談日程はLINEで何往復もして調整</li><li>選考結果は担当の頭の中。社長は個別に確認</li><li>月末に帳簿・売上見込みを手で集計</li></ul></div>
+      <div class="col before"><h3>いま（Excel＋LINE個別対応）</h3><ul><li>朝、Excelとトーク履歴を見比べて今日やることを探す</li><li>相談が来たらシートに転記し、空いている人に口頭で振る</li><li>面談日程はLINEで何往復もして調整</li><li>選考結果は担当の頭の中。社長は個別に確認</li><li>月末に帳簿・売上見込みを手で集計</li><li>紹介者への紹介料は、Excelで計算して支払い時期も手で管理</li></ul></div>
       <div class="arrow" aria-hidden="true">→</div>
-      <div class="col after"><h3>導入後（AgentBoard）</h3><ul><li>ログインすると「今日やること・期限切れ」が自動で並ぶ</li><li>サイト・LINEからの相談は自動で登録され、担当も割り当て済み</li><li>求職者が空き枠から面談を自分で予約</li><li>選考ボードで全員の案件が一目で分かり、本人のマイページにも自動反映</li><li>帳簿・流入経路別レポートは常に最新、CSVですぐ出せる</li></ul></div>
+      <div class="col after"><h3>導入後（AgentBoard）</h3><ul><li>ログインすると「今日やること・期限切れ」が自動で並ぶ</li><li>サイト・LINEからの相談は自動で登録され、担当も割り当て済み</li><li>求職者が空き枠から面談を自分で予約</li><li>選考ボードで全員の案件が一目で分かり、本人のマイページにも自動反映</li><li>帳簿・流入経路別レポートは常に最新、CSVですぐ出せる</li><li>紹介料は成約時に自動で計算され、支払える時期になると知らせてくれる</li></ul></div>
     </div>
   </div>
 </section>
@@ -294,13 +296,37 @@ td.r,th.r{text-align:right}
       <div class="feat"><span class="stage">選考</span><h3>選考ボード</h3><p>推薦から入社までをカードで管理。7日以上止まった案件は赤で警告します。</p></div>
       <div class="feat"><span class="stage">面接対策</span><h3>練習記録と想定質問</h3><p>練習の評価と宿題を残し、企業ごとの想定質問を作ってマイページに共有します。</p></div>
       <div class="feat"><span class="stage">成約</span><h3>請求・返金期限管理</h3><p>承諾した時点で手数料を自動計算。請求・入金状況と返金保証期間を追跡します。</p></div>
-      <div class="feat"><span class="stage">管理</span><h3>法定帳簿・レポート</h3><p>求職管理簿・求人管理簿・手数料管理簿、担当者別・流入経路別の実績を自動作成。</p></div>
+      <div class="feat"><span class="stage">管理</span><h3>法定帳簿・レポート</h3><p>求職管理簿・求人管理簿・手数料管理簿に加え、担当者別・紹介者別・流入経路別の決定率を自動で集計。</p></div>
       <div class="feat"><span class="stage">連絡</span><h3>メッセージ・通知</h3><p>マイページでのやりとりを担当ごとに記録。ステータスが変わったらLINEで本人に通知。</p></div>
     </div>
   </div>
 </section>
 
-<section id="roi">
+<section id="referral">
+  <div class="wrap">
+    <div class="sec-title"><span class="eyebrow">REFERRAL</span><h2>紹介者からのご紹介も、<span class="mk">紹介料の支払いまで</span></h2><p>求職者をつないでくれる紹介者ごとに、決定率と紹介料をまとめて管理します。紹介の連鎖は最大5窓口まで、配分を決めて自動で計算します。</p></div>
+    <div class="grid g2">
+      <div class="card"><span class="rib">流れ</span><h3>登録しておけば、支払う時期まで自動で追える</h3>
+        <div class="stage-row"><span class="no">1</span><span>求職者の登録時に、紹介の連鎖を入れる<br><span class="sub">窓口1（求職者に一番近い人）から最大5窓口まで、紹介者と配分の割合を登録</span></span><span></span></div>
+        <div class="stage-row"><span class="no">2</span><span>成約すると、紹介料を自動で計算<br><span class="sub">紹介手数料 × 紹介料率 を、窓口ごとの割合で分ける</span></span><span></span></div>
+        <div class="stage-row"><span class="no">3</span><span>返金保証期間が過ぎたら「支払待ち」に<br><span class="sub">早期退職で返金になった場合は、自動で取消。支払済みなら回収が必要と表示</span></span><span></span></div>
+        <div class="stage-row"><span class="no">4</span><span>支払済にして、振込データを出力<br><span class="sub">まとめて支払済にでき、振込先・インボイス番号つきで一覧にできる</span></span><span></span></div>
+      </div>
+      <div class="card"><span class="rib">計算の例</span><h3>3窓口の紹介で決まった場合</h3>
+        <div class="tbl-wrap"><table class="cmp"><tbody>
+          <tr><td>理論年収 400万円 × 紹介手数料率 30%</td><td class="num">紹介手数料 120万円</td></tr>
+          <tr><td>× 紹介料率 15%</td><td class="num">紹介料 18万円</td></tr>
+          <tr class="ours"><td>窓口1（求職者に一番近い紹介者）50%</td><td class="num">9万円</td></tr>
+          <tr class="ours"><td>窓口2　30%</td><td class="num">5.4万円</td></tr>
+          <tr class="ours"><td>窓口3　20%</td><td class="num">3.6万円</td></tr>
+        </tbody></table></div>
+        <ul class="check" style="margin-top:12px"><li>紹介者ごとの決定率・売上・紹介料を差し引いた利益が一覧で分かる</li><li>社員ごとの決定率も、期間を指定して比べられる</li><li>紹介料の金額と振込先は、代表と経理担当だけが見られる設定</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roi" class="band-mint">
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">COST EFFECTIVENESS</span><h2>費用対効果の<span class="mk">試算</span></h2><p>業務量・時給・手数料は仮の値です。実際の数字に書き換えると、すべての結果がその場で計算し直されます。</p></div>
     <div class="roi">
@@ -346,7 +372,7 @@ td.r,th.r{text-align:right}
   </div>
 </section>
 
-<section class="band-mint">
+<section>
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">DESIGN</span><h2>システムの<span class="mk">設計概要</span></h2></div>
     <div class="grid g2">
@@ -358,25 +384,25 @@ td.r,th.r{text-align:right}
   </div>
 </section>
 
-<section id="plans">
+<section id="plans" class="band-mint">
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">PLANS</span><h2>3つの<span class="mk">プラン</span></h2><p>買い切り型です。どのプランも、初年度の保守とサーバー代を初期費用に含みます（金額はすべて税別）。</p></div>
     <div class="plans">
-      <div class="plan"><h3>ライト</h3><span class="pv">180<small>万円</small></span><span class="sub">社内の管理だけをシステムにしたい</span><ul class="check"><li>求職者・求人・企業・選考ボード・今日やること</li><li>成約・請求・返金期限の管理</li><li>法定帳簿・レポート</li><li>Excelからのデータ移行・操作説明</li></ul><div class="maint">2年目以降の保守 <b>年30万円</b></div></div>
-      <div class="plan rec"><span class="badge">おすすめ</span><h3>スタンダード</h3><span class="pv">300<small>万円</small></span><span class="sub">サイト・LINEまで一体で使いたい</span><ul class="check"><li>ライトの内容すべて</li><li>サイト・LINEからの相談の自動登録と面談予約</li><li>求職者マイページとLINE通知、流入経路の分析</li><li>AIによる職務経歴書・推薦状の下書き、求人票の取り込み、想定質問の作成</li></ul><div class="maint">2年目以降の保守 <b>年36万円</b></div></div>
+      <div class="plan"><h3>ライト</h3><span class="pv">180<small>万円</small></span><span class="sub">社内の管理だけをシステムにしたい</span><ul class="check"><li>求職者・求人・企業・選考ボード・今日やること</li><li>成約・請求・返金期限の管理</li><li>法定帳簿・レポート</li><li>Excelからのデータ移行・操作説明</li></ul><div class="maint">2年目以降の保守 <b>年30万円</b><br><span class="sub">紹介者・紹介料の管理は＋30万円で追加できます</span></div></div>
+      <div class="plan rec"><span class="badge">おすすめ</span><h3>スタンダード</h3><span class="pv">300<small>万円</small></span><span class="sub">サイト・LINEまで一体で使いたい</span><ul class="check"><li>ライトの内容すべて</li><li>サイト・LINEからの相談の自動登録と面談予約</li><li>求職者マイページとLINE通知、流入経路の分析</li><li>AIによる職務経歴書・推薦状の下書き、求人票の取り込み、想定質問の作成</li><li>紹介者・紹介料の管理（最大5窓口）</li></ul><div class="maint">2年目以降の保守 <b>年36万円</b></div></div>
       <div class="plan"><h3>プレミアム</h3><span class="pv">380<small>万円</small></span><span class="sub">入力の手間をさらに減らし、運用も任せたい</span><ul class="check"><li>スタンダードの内容すべて</li><li>面談の録音からヒアリングシートを自動入力</li><li>1年間の運用伴走（月1回の改善ミーティング）</li></ul><div class="maint">2年目以降の保守 <b>年48万円</b><br><span class="sub">録音の文字起こしの利用料は実費</span></div></div>
     </div>
     <div class="howbuy">
       <div class="card"><span class="rib">段階発注</span><h3>まず第1段階で試してから、続きを決められます</h3><p>スタンダードは2段階に分けて発注できます。第1段階で効果を確かめてから、第2段階をお決めください。第1段階だけで止めた場合は、ライトと同じ内容になります。</p>
         <div class="stage-row"><span class="no">1</span><span>社内で使い始める（ライトと同じ範囲）<br><span class="sub">開発 約6〜8週間 → 1〜2か月使って効果を確認</span></span><span class="amt">180万円</span></div>
-        <div class="stage-row"><span class="no">2</span><span>サイト・LINE・マイページ連携とAI機能<br><span class="sub">開発 約6週間</span></span><span class="amt">120万円</span></div>
+        <div class="stage-row"><span class="no">2</span><span>サイト・LINE・マイページ連携、AI機能、紹介料の管理<br><span class="sub">開発 約6週間</span></span><span class="amt">120万円</span></div>
       </div>
       <div class="card"><span class="rib">お支払い</span><h3>各段階とも、2回に分けてお支払いいただけます</h3><ul class="check"><li>契約時に半額</li><li>使い始めて1か月、問題がなければ残りの半額</li><li>2年目以降の保守は年1回のお支払い</li></ul><p>開発の範囲は機能の一覧として契約書に添付し、追加のご要望は都度お見積りします。データは御社のもので、いつでもCSVで出力できます。</p></div>
     </div>
   </div>
 </section>
 
-<section class="band-mint">
+<section>
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">COMPARISON</span><h2>他のサービスとの<span class="mk">総額比較</span></h2><p>月額型のサービスは、人数が増えるほど費用が増えます。AgentBoardは人数が増えても保守費は変わりません。</p></div>
     <div class="card tbl-wrap"><table class="cmp"><thead><tr><th>サービス</th><th>費用の形</th><th class="num">3年間の総額</th><th class="num">5年間の総額</th></tr></thead><tbody>
@@ -389,7 +415,7 @@ td.r,th.r{text-align:right}
   </div>
 </section>
 
-<section>
+<section class="band-mint">
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">SCHEDULE</span><h2>導入の<span class="mk">進め方</span></h2><p>一度に全部を変えず、毎日使う機能から順に切り替えます。</p></div>
     <div class="steps">
@@ -401,7 +427,7 @@ td.r,th.r{text-align:right}
   </div>
 </section>
 
-<section class="band-mint">
+<section>
   <div class="wrap">
     <div class="sec-title"><span class="eyebrow">FAQ</span><h2>よくある<span class="mk">ご質問</span></h2></div>
     <div class="faq">
@@ -410,6 +436,7 @@ td.r,th.r{text-align:right}
       <details><summary>社員が使いこなせるか不安です。</summary><p>ご契約の前に、社員の方にPOCを実際に触っていただけます。操作説明は費用に含まれ、第1段階のあとに1〜2か月使ってから続きを決められます。</p></details>
       <details><summary>今のExcelのデータはどうなりますか？</summary><p>こちらで新しいシステムに移します。移行の作業は初期費用に含まれます。</p></details>
       <details><summary>途中で要望が増えたらどうなりますか？</summary><p>契約時に作る範囲を機能の一覧で決めておき、追加のご要望はその都度お見積りします。小さな修正は保守の範囲で対応します。</p></details>
+      <details><summary>紹介者に払う紹介料も管理できますか？</summary><p>できます（スタンダード以上）。紹介の連鎖を最大5窓口まで登録しておくと、成約時に紹介料を自動で計算し、返金保証期間が過ぎた時点で支払待ちになります。紹介者ごとの決定率も一覧で見られます。源泉徴収や消費税の扱いは、御社の税理士の方針に合わせて設定します。</p></details>
       <details><summary>データは誰のものですか？</summary><p>御社のものです。いつでもCSVで出力できます。万一のときのデータの引き継ぎ方法も、契約書に定めます。</p></details>
     </div>
   </div>
@@ -439,7 +466,8 @@ var TASKS=[
   {n:'Excelの検索・更新・二重入力',u:'1人1日',b:30,a:10,q:function(v){return v.staff*20},why:'1画面で完結、今日やることが自動で並ぶ'},
   {n:'選考状況の確認・本人への連絡',u:'応募1件・週',b:10,a:4,q:function(v){return v.act*4.3},why:'ステータス変更がマイページとLINEに自動反映'},
   {n:'帳簿・月次レポートの作成',u:'月1回',b:480,a:60,q:function(){return 1},why:'日々の入力から自動で作成、CSVで出力'},
-  {n:'請求・入金・返金期限の管理',u:'決定1件',b:60,a:15,q:function(v){return v.dec},why:'承諾時に手数料を自動計算、期限を通知'}
+  {n:'請求・入金・返金期限の管理',u:'決定1件',b:60,a:15,q:function(v){return v.dec},why:'承諾時に手数料を自動計算、期限を通知'},
+  {n:'紹介料の計算・支払い時期の管理',u:'紹介経由の決定1件',b:45,a:5,q:function(v){return v.dec*0.3},why:'成約時に窓口ごとの紹介料を自動計算、支払える時期を通知'}
 ];
 function g(id){var x=parseFloat(document.getElementById(id).value);return isFinite(x)&&x>=0?x:0}
 function f1(n){return (Math.round(n*10)/10).toLocaleString()}
