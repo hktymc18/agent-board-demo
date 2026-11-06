@@ -269,8 +269,8 @@ var CSTAT=['新規問い合わせ','面談予約済','面談済','求人紹介�
 var STAFF=['佐藤（代表）','田中','鈴木','高橋','伊藤'];
 var JOBTYPES=['法人営業','営業事務','一般事務','カスタマーサポート','ITエンジニア','Webデザイナー','販売・接客','人事'];
 var AREAS=['天神・博多','福岡市内（その他）','北九州','久留米','リモート可'];
-var SOURCES={ig:'Instagram',line:'LINE',google:'Google検索',tiktok:'TikTok','':'直接・その他'};
-var KEY='agentboard-fuccari-v2';
+var SOURCES={ig:'Instagram',line:'LINE',google:'Google検索',tiktok:'TikTok',ref:'紹介者','':'直接・その他'};
+var KEY='agentboard-fuccari-v3';
 function pad(n){return (n<10?'0':'')+n}
 function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 var TODAY=new Date();TODAY.setHours(0,0,0,0);
@@ -295,12 +295,12 @@ function seed(){
    cand({id:'c2',name:'中村 彩',kana:'なかむら あや',age:25,phone:'090-1111-0002',email:'nakamura@example.com',current:'アパレル / 販売スタッフ',wantType:'営業事務',area:'天神・博多',salaryNow:270,salaryWant:300,skills:['接客','Excel'],owner:'鈴木',source:'ig',created:day(-40),status:'面談済',next:{t:'最終面接の振り返り連絡',d:day(1)},
     hearing:{reason:'立ち仕事から事務職へ。土日休みにしたい',skill:'店舗の在庫管理・売上集計をExcelで担当',wish:'事務職、土日休み',ng:'転勤',timing:'3ヶ月以内',consent:true},docs:{resume:'中村_履歴書.pdf',cv:''},
     practice:[{d:day(-6),job:'j6',score:4,good:'受け答えが落ち着いている',bad:'逆質問をもう1つ用意',shared:true}]}),
-   cand({id:'c3',name:'小林 大輔',kana:'こばやし だいすけ',age:31,phone:'090-1111-0003',email:'kobayashi@example.com',current:'SES企業 / システムエンジニア',wantType:'ITエンジニア',area:'リモート可',salaryNow:420,salaryWant:500,skills:['Java','AWS','チームリード'],owner:'田中',source:'google',created:day(-50),status:'面談済',next:{t:'内定条件の確認（年収・入社日）',d:day(0)},
+   cand({id:'c3',name:'小林 大輔',kana:'こばやし だいすけ',age:31,phone:'090-1111-0003',email:'kobayashi@example.com',current:'SES企業 / システムエンジニア',wantType:'ITエンジニア',area:'リモート可',salaryNow:420,salaryWant:500,skills:['Java','AWS','チームリード'],owner:'田中',source:'ref',ref:{pool:15,chain:[{r:'r6',share:70},{r:'r1',share:30}]},created:day(-50),status:'面談済',next:{t:'内定条件の確認（年収・入社日）',d:day(0)},
     hearing:{reason:'自社サービス開発に携わりたい',skill:'Java歴7年、3名チームのリード',wish:'リモート併用、年収500万',ng:'客先常駐',timing:'即時',consent:true},docs:{resume:'小林_履歴書.pdf',cv:'小林_職務経歴書.pdf'}}),
    cand({id:'c4',name:'加藤 美咲',kana:'かとう みさき',age:24,phone:'090-1111-0004',email:'kato@example.com',current:'飲食店 / ホールスタッフ',wantType:'カスタマーサポート',area:'福岡市内（その他）',salaryNow:250,salaryWant:290,skills:['接客','目標達成'],owner:'高橋',source:'tiktok',created:day(-21),status:'面談済',next:{t:'一次面接（本日16:00）の後に感想ヒアリング',d:day(0)},
     hearing:{reason:'夜遅いシフトをやめて生活リズムを整えたい',skill:'アルバイトリーダーとして新人教育',wish:'日勤のみ、未経験OK',ng:'夜勤',timing:'3ヶ月以内',consent:true},docs:{resume:'加藤_履歴書.pdf',cv:''},
     practice:[{d:day(-1),job:'j7',score:2,good:'明るく印象が良い',bad:'志望理由が弱い。接客経験とサポート業務のつながりを練習',shared:true}]}),
-   cand({id:'c5',name:'吉田 健',kana:'よしだ けん',age:34,phone:'090-1111-0005',email:'yoshida@example.com',current:'メーカー / 経理',wantType:'一般事務',area:'天神・博多',salaryNow:400,salaryWant:430,skills:['経理','Excel','管理職'],owner:'佐藤（代表）',source:'line',created:day(-60),status:'面談済',next:{t:'最終面接の対策日程を決める',d:day(-1)},
+   cand({id:'c5',name:'吉田 健',kana:'よしだ けん',age:34,phone:'090-1111-0005',email:'yoshida@example.com',current:'メーカー / 経理',wantType:'一般事務',area:'天神・博多',salaryNow:400,salaryWant:430,skills:['経理','Excel','管理職'],owner:'佐藤（代表）',source:'ref',ref:{pool:15,chain:[{r:'r1',share:60},{r:'r5',share:40}]},created:day(-60),status:'面談済',next:{t:'最終面接の対策日程を決める',d:day(-1)},
     hearing:{reason:'Uターンで地元の福岡に戻りたい',skill:'月次決算、後輩3名の指導',wish:'年収430万、福岡市内',ng:'特になし',timing:'半年以内',consent:true},docs:{resume:'吉田_履歴書.pdf',cv:'吉田_職務経歴書.pdf'}}),
    cand({id:'c6',name:'山田 優花',kana:'やまだ ゆか',age:28,phone:'090-1111-0006',email:'yamada@example.com',current:'印刷会社 / DTPオペレーター',wantType:'Webデザイナー',area:'天神・博多',salaryNow:300,salaryWant:350,skills:['Photoshop','Illustrator','Figma'],owner:'鈴木',source:'ig',created:day(-28),status:'面談済',next:{t:'書類選考の状況を企業に確認',d:day(-2)},
     hearing:{reason:'Webの仕事に挑戦したい',skill:'チラシ・パンフ制作5年',wish:'Web制作会社、年収350万',ng:'特になし',timing:'3ヶ月以内',consent:true},docs:{resume:'山田_履歴書.pdf',cv:'山田_職務経歴書.pdf'}}),
@@ -310,8 +310,11 @@ function seed(){
     hearing:{reason:'モダンな開発環境で働きたい',skill:'React歴2年',wish:'リモート併用、年収380万',ng:'SES',timing:'3ヶ月以内',consent:true},docs:{resume:'井上_履歴書.pdf',cv:''}}),
    cand({id:'c10',name:'木村 早紀',kana:'きむら さき',age:26,phone:'090-1111-0010',email:'kimura@example.com',current:'コールセンター / SV',wantType:'カスタマーサポート',area:'天神・博多',salaryNow:290,salaryWant:330,skills:['顧客対応','SaaS'],owner:'鈴木',source:'line',created:day(-12),status:'面談済',next:{t:'紹介求人への応募意思を確認',d:day(2)},
     hearing:{reason:'顧客に長く寄り添う仕事がしたい',skill:'SV経験2年',wish:'年収330万',ng:'夜勤',timing:'3ヶ月以内',consent:true}}),
-   cand({id:'c11',name:'林 慎吾',kana:'はやし しんご',age:30,phone:'090-1111-0011',email:'hayashi@example.com',current:'印刷会社 / ルート営業',wantType:'法人営業',area:'天神・博多',salaryNow:360,salaryWant:400,skills:['法人営業'],owner:'田中',source:'ig',created:day(-95),status:'面談済',next:{t:'入社1ヶ月フォロー面談',d:day(18)},hearing:{consent:true}}),
-   cand({id:'c12',name:'清水 真央',kana:'しみず まお',age:27,phone:'090-1111-0012',email:'shimizu@example.com',current:'会計事務所 / スタッフ',wantType:'一般事務',area:'天神・博多',salaryNow:300,salaryWant:340,skills:['経理','Excel'],owner:'佐藤（代表）',source:'google',created:day(-45),status:'面談済',next:{t:'退職交渉の進捗確認',d:day(3)},hearing:{consent:true}})
+   cand({id:'c11',name:'林 慎吾',kana:'はやし しんご',age:30,phone:'090-1111-0011',email:'hayashi@example.com',current:'印刷会社 / ルート営業',wantType:'法人営業',area:'天神・博多',salaryNow:360,salaryWant:400,skills:['法人営業'],owner:'田中',source:'ref',ref:{pool:15,chain:[{r:'r4',share:50},{r:'r2',share:30},{r:'r5',share:20}]},created:day(-95),status:'面談済',next:{t:'入社1ヶ月フォロー面談',d:day(18)},hearing:{consent:true}}),
+   cand({id:'c12',name:'清水 真央',kana:'しみず まお',age:27,phone:'090-1111-0012',email:'shimizu@example.com',current:'会計事務所 / スタッフ',wantType:'一般事務',area:'天神・博多',salaryNow:300,salaryWant:340,skills:['経理','Excel'],owner:'佐藤（代表）',source:'ref',ref:{pool:10,chain:[{r:'r2',share:100}]},created:day(-45),status:'面談済',next:{t:'退職交渉の進捗確認',d:day(3)},hearing:{consent:true}}),
+   cand({id:'c13',name:'前田 悠',kana:'まえだ はるか',age:26,phone:'090-1111-0013',email:'maeda@example.com',current:'Webデザイナー（入社済み）',wantType:'Webデザイナー',area:'天神・博多',salaryNow:300,salaryWant:340,skills:['Photoshop','Figma'],owner:'鈴木',source:'ref',ref:{pool:15,chain:[{r:'r1',share:50},{r:'r4',share:30},{r:'r5',share:20}]},created:day(-200),status:'面談済',next:{t:'',d:''},hearing:{consent:true}}),
+   cand({id:'c14',name:'森 由佳',kana:'もり ゆか',age:29,phone:'090-1111-0014',email:'mori@example.com',current:'カスタマーサポート（入社済み）',wantType:'カスタマーサポート',area:'福岡市内（その他）',salaryNow:280,salaryWant:300,skills:['接客','顧客対応'],owner:'高橋',source:'ref',ref:{pool:10,chain:[{r:'r2',share:100}]},created:day(-300),status:'面談済',next:{t:'',d:''},hearing:{consent:true}}),
+   cand({id:'c15',name:'原田 航',kana:'はらだ わたる',age:25,phone:'090-1111-0015',email:'harada@example.com',current:'早期退職（返金対応中）',wantType:'カスタマーサポート',area:'天神・博多',salaryNow:290,salaryWant:320,skills:['顧客対応'],owner:'伊藤',source:'ref',ref:{pool:15,chain:[{r:'r6',share:100}]},created:day(-110),status:'面談済',next:{t:'返金後のフォロー連絡',d:day(2)},hearing:{consent:true}})
   ];
   var CO=[
    {id:'k1',name:'株式会社はかたリンク',ind:'IT・SaaS',fee:30,refund:'1ヶ月以内 80% / 3ヶ月以内 50%',contract:day(-300),contact:'人事部 岡田様'},
@@ -348,9 +351,20 @@ function seed(){
    A('a14','c10','j7','推薦準備',day(-1),null,'未確認'),
    A('a11','c6','j2','見送り',day(-6)),
    A('a12','c9','j4','推薦準備',day(0)),
-   A('a13','c2','j8','見送り',day(-15))
+   A('a13','c2','j8','見送り',day(-15)),
+   A('a15','c13','j9','入社',day(-150)),
+   A('a16','c14','j7','入社',day(-240)),
+   A('a17','c15','j2','入社',day(-60))
   ];
-  var PL=[{app:'a8',salary:400,join:day(-12),inv:'入金済'},{app:'a9',salary:330,join:day(20),inv:'未請求'}];
+  var PL=[{app:'a8',salary:400,join:day(-12),inv:'入金済'},{app:'a9',salary:330,join:day(20),inv:'未請求'},
+   {app:'a15',salary:340,join:day(-150),inv:'入金済'},{app:'a16',salary:300,join:day(-240),inv:'入金済',pay:{'0':day(-130)}},{app:'a17',salary:320,join:day(-60),inv:'返金対応'}];
+  var RF=[
+   {id:'r1',name:'西田 健一',kind:'個人',contact:'元人材会社勤務・経営者ネットワーク',bank:'福岡銀行 天神支店 普通 1234567',invoice:'T1234567890123'},
+   {id:'r2',name:'株式会社キャリアブリッジ九州',kind:'提携企業',contact:'代表 吉村様',bank:'西日本シティ銀行 博多支店 普通 2345678',invoice:'T2345678901234'},
+   {id:'r4',name:'中野 美穂',kind:'個人',contact:'キャリアコンサルタント',bank:'ゆうちょ銀行 七一八店 普通 3456789',invoice:''},
+   {id:'r5',name:'博多ビジネス交流会 事務局',kind:'団体',contact:'事務局 松尾様',bank:'福岡銀行 博多駅前支店 普通 4567890',invoice:'T3456789012345'},
+   {id:'r6',name:'久保 亮',kind:'個人',contact:'大学OBネットワーク',bank:'楽天銀行 第一営業支店 普通 5678901',invoice:''}
+  ];
   var MTG=[
    {id:'m1',c:'c7',d:day(1),t:'19:00',owner:'伊藤',how:'オンライン（Zoom）',kind:'初回面談'},
    {id:'m2',c:'c10',d:day(0),t:'13:00',owner:'鈴木',how:'来社（天神オフィス）',kind:'求人紹介面談'}
@@ -374,7 +388,7 @@ function seed(){
    {d:day(-1),tm:'21:14',dir:'in',t:'山本 翔太さんがマイページからメッセージを送信',c:'c1'},
    {d:day(-1),tm:'15:20',dir:'line',t:'木村 早紀さんへLINEで通知：マイページに求人2件のご紹介',c:'c10'}
   ];
-  return {me:'田中',C:C,CO:CO,J:J,AP:AP,PL:PL,MTG:MTG,MSG:MSG,LOG:LOG,EV:EV,view:'home',param:null,tab:'over',
+  return {me:'田中',C:C,CO:CO,J:J,AP:AP,PL:PL,RF:RF,MTG:MTG,MSG:MSG,LOG:LOG,EV:EV,view:'home',param:null,tab:'over',
           site:{sv:'top',utm:'ig',job:null,slot:null,my:'c10',flash:null}};
 }
 var S;
@@ -400,6 +414,21 @@ function stChip(s){var m={'新規問い合わせ':'c-danger','面談予約済':'
 function stageChip(s){var i=si(s);var cl=s===CLOSED?'':i>=4?'c-ok':i>=1?'c-acc':'c-info';return '<span class="chip '+cl+'">'+esc(s)+'</span>'}
 function intentChip(a){if(a.stage!=='推薦準備')return '';var m={'未確認':'c-warn','応募したい':'c-ok','見送り希望':''};return '<span class="chip '+m[a.intent]+'">本人：'+(a.intent==='未確認'?'返答待ち':a.intent)+'</span>'}
 function fee(p){var a=AP(p.app),j=J(a.j),co=CO(j.co);return p.salary*co.fee/100}
+function RFo(id){return S.RF.find(function(x){return x.id===id})}
+function gEnd(p){var co=CO(J(AP(p.app).j).co),m=co.refund.match(/(\d)ヶ月以内[^/]*$/),r=new Date(p.join+'T00:00:00');r.setMonth(r.getMonth()+(m?+m[1]:3));return iso(r)}
+var PAYORDER=['支払待ち','回収が必要','保証期間中','入社前','支払済','取消'];
+/* 紹介料：成約ごとに「紹介手数料 × 紹介料率」を窓口1〜5へ割合で分配。返金保証期間が過ぎたら支払える */
+function payLines(){
+  var out=[];
+  S.PL.forEach(function(p){var c=C(AP(p.app).c);if(!c||!c.ref||!c.ref.chain.length)return;var total=fee(p)*c.ref.pool/100,end=gEnd(p);p.pay=p.pay||{};
+    c.ref.chain.forEach(function(w,i){var paid=p.pay[String(i)],st;
+      if(p.inv==='返金対応')st=paid?'回収が必要':'取消';else if(paid)st='支払済';else if(diff(p.join)>0)st='入社前';else if(diff(end)>=0)st='保証期間中';else st='支払待ち';
+      out.push({p:p,c:c,i:i,n:c.ref.chain.length,r:w.r,share:w.share,pool:c.ref.pool,amt:total*w.share/100,due:end,st:st,paid:paid})});});
+  return out;
+}
+function defShares(n){return [[100],[70,30],[50,30,20],[40,25,20,15],[35,25,20,12,8]].at(n-1)||[]}
+function rate(a,b){return b?Math.round(a/b*100)+'%':'—'}
+function inPeriod(c){var d=+(S.rp||0);return !d||diff(c.created)>=-d}
 function log(cid,t,by){S.LOG.push({id:uid('l'),c:cid,d:day(0),t:t,by:by||S.me})}
 function ev(dir,t,cid){S.EV.unshift({d:day(0),tm:now(),dir:dir,t:t,c:cid})}
 function notify(c,t){ev(c.contact==='LINE'?'line':'out',c.name+'さんへ'+(c.contact==='LINE'?'LINEで通知':c.contact==='電話'?'SMSで通知':'メールで通知')+'：'+t,c.id)}
@@ -418,7 +447,7 @@ function score(c,j){
 }
 
 /* ===== 画面 ===== */
-var VIEWS=[['home','ホーム'],['cands','求職者'],['board','選考ボード'],['jobs','求人・企業'],['prac','面接対策'],['deals','成約・請求'],['books','帳簿・レポート']];
+var VIEWS=[['home','ホーム'],['cands','求職者'],['board','選考ボード'],['jobs','求人・企業'],['prac','面接対策'],['deals','成約・請求'],['refs','紹介者・紹介料'],['books','帳簿・レポート']];
 function go(v,p,tab){S.view=v;S.param=p||null;if(tab)S.tab=tab;save();render();window.scrollTo(0,0)}
 function openC(id,tab){go('cand',id,tab||'over')}
 function todos(){
@@ -430,6 +459,7 @@ function menuBadge(v){
   var n=0;
   if(v==='home')n=todos().length;
   if(v==='cands')n=S.C.filter(function(c){return cstatus(c)==='新規問い合わせ'}).length+unread();
+  if(v==='refs')n=payLines().filter(function(l){return l.st==='支払待ち'||l.st==='回収が必要'}).length;
   return n?'<span class="badge">'+n+'</span>':'';
 }
 function render(){
@@ -522,7 +552,7 @@ T.over=function(c){
   var nx=c.next||{t:'',d:''},m=S.MTG.filter(function(x){return x.c===c.id&&diff(x.d)>=0})[0];
   var h='<div class="grid g-2"><section class="card pad"><div class="sec-h"><h2>次のアクション</h2><span>ホームの「今日やること」に表示されます</span></div><div class="form"><label>内容<input type="text" id="nt" value="'+esc(nx.t)+'" placeholder="例：求人を3件紹介する"></label><div class="f2"><label>期限<input type="date" id="nd" value="'+esc(nx.d)+'"></label></div><div><button class="btn pri" onclick="saveNext(\''+c.id+'\')">保存</button></div></div>'+
     (m?'<div class="s-card" style="margin-top:14px"><b>'+esc(m.kind)+'：'+fd(m.d)+' '+m.t+'</b><span class="note">'+esc(m.how)+' ・ 担当 '+esc(m.owner)+'</span></div>':'')+'</section>';
-  h+='<section class="card pad"><div class="sec-h"><h2>基本情報</h2></div><dl class="dl"><dt>電話</dt><dd class="num">'+esc(c.phone)+'</dd><dt>メール</dt><dd>'+esc(c.email)+'</dd><dt>希望の連絡方法</dt><dd>'+esc(c.contact)+'</dd><dt>流入経路</dt><dd><span class="src">'+esc(src(c))+'</span></dd><dt>登録日</dt><dd>'+fd(c.created)+'（'+rel(c.created)+'）</dd><dt>年収</dt><dd class="num">'+(c.salaryWant?'現在 '+c.salaryNow+'万 → 希望 '+c.salaryWant+'万':'未ヒアリング')+'</dd><dt>スキル</dt><dd>'+((c.skills||[]).map(function(s){return '<span class="chip">'+esc(s)+'</span>'}).join(' ')||'—')+'</dd>'+
+  h+='<section class="card pad"><div class="sec-h"><h2>基本情報</h2></div><dl class="dl"><dt>電話</dt><dd class="num">'+esc(c.phone)+'</dd><dt>メール</dt><dd>'+esc(c.email)+'</dd><dt>希望の連絡方法</dt><dd>'+esc(c.contact)+'</dd><dt>流入経路</dt><dd><span class="src">'+esc(src(c))+'</span></dd>'+(c.source==='ref'?'<dt>紹介者</dt><dd>'+refChain(c)+' <button class="btn sm" onclick="refModal(\''+c.id+'\')">紹介者を設定</button></dd>':'')+'<dt>登録日</dt><dd>'+fd(c.created)+'（'+rel(c.created)+'）</dd><dt>年収</dt><dd class="num">'+(c.salaryWant?'現在 '+c.salaryNow+'万 → 希望 '+c.salaryWant+'万':'未ヒアリング')+'</dd><dt>スキル</dt><dd>'+((c.skills||[]).map(function(s){return '<span class="chip">'+esc(s)+'</span>'}).join(' ')||'—')+'</dd>'+
     '<dt>提出書類</dt><dd>'+docChip('履歴書',c.docs.resume)+' '+docChip('職務経歴書',c.docs.cv)+'</dd>'+
     '<dt>第三者提供の同意</dt><dd>'+((c.hearing||{}).consent?'<span class="chip c-ok">取得済み</span>':'<span class="chip c-danger">未取得（推薦前に必要）</span>')+'</dd></dl>'+
     (!appsOf(c.id).length?'<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span class="note" style="align-self:center">ステータス：</span>'+['新規問い合わせ','面談予約済','面談済','休止'].map(function(s){return '<button class="btn sm'+(c.status===s?' pri':'')+'" onclick="setStatus(\''+c.id+'\',\''+s+'\')">'+s+'</button>'}).join('')+'</div>':'')+'</section></div>';
@@ -653,14 +683,54 @@ V.prac=function(){
 V.deals=function(){
   var tot=0,inc=0;
   var rows=S.PL.map(function(p){var a=AP(p.app),c=C(a.c),j=J(a.j),co=CO(j.co),f=fee(p);tot+=f;if(p.inv==='入金済')inc+=f;var m=co.refund.match(/(\d)ヶ月以内[^/]*$/);var months=m?+m[1]:3;var r=new Date(p.join+'T00:00:00');r.setMonth(r.getMonth()+months);var rd=iso(r);var inRefund=diff(p.join)<=0&&diff(rd)>=0;
-    return '<tr><td><b>'+esc(c.name)+'</b><div class="note">'+esc(c.owner)+'</div></td><td>'+esc(co.name)+'<div class="note">'+esc(j.title)+'</div></td><td><input type="date" aria-label="入社日" value="'+p.join+'" onchange="setPL(\''+p.app+'\',\'join\',this.value)"></td><td class="r"><input type="number" aria-label="理論年収" style="width:80px;text-align:right" value="'+p.salary+'" onchange="setPL(\''+p.app+'\',\'salary\',+this.value)"> 万</td><td class="r num">'+co.fee+'%</td><td class="r num">'+yen(f)+'</td><td class="r num">'+yen(f*1.1)+'</td><td><select aria-label="請求状況" onchange="setPL(\''+p.app+'\',\'inv\',this.value)">'+['未請求','請求済','入金済','返金対応'].map(function(s){return '<option'+(s===p.inv?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td><td>'+(inRefund?'<span class="chip c-warn">保証期間中〜'+fd(rd)+'</span>':diff(p.join)>0?'<span class="chip c-info">入社前</span>':'<span class="chip c-ok">期間終了</span>')+'<div class="note">'+esc(co.refund)+'</div></td></tr>'}).join('');
+    return '<tr><td><b>'+esc(c.name)+'</b><div class="note">'+esc(c.owner)+'</div></td><td>'+esc(co.name)+'<div class="note">'+esc(j.title)+'</div></td><td><input type="date" aria-label="入社日" value="'+p.join+'" onchange="setPL(\''+p.app+'\',\'join\',this.value)"></td><td class="r"><input type="number" aria-label="理論年収" style="width:80px;text-align:right" value="'+p.salary+'" onchange="setPL(\''+p.app+'\',\'salary\',+this.value)"> 万</td><td class="r num">'+co.fee+'%</td><td class="r num">'+yen(f)+'</td><td class="r num">'+yen(f*1.1)+'</td><td class="r">'+(c.ref&&c.ref.chain.length?'<span class="num">'+yen(f*c.ref.pool/100)+'</span><div class="note">'+c.ref.chain.length+'窓口・手数料の'+c.ref.pool+'%</div>':'—')+'</td><td><select aria-label="請求状況" onchange="setPL(\''+p.app+'\',\'inv\',this.value)">'+['未請求','請求済','入金済','返金対応'].map(function(s){return '<option'+(s===p.inv?' selected':'')+'>'+s+'</option>'}).join('')+'</select></td><td>'+(inRefund?'<span class="chip c-warn">保証期間中〜'+fd(rd)+'</span>':diff(p.join)>0?'<span class="chip c-info">入社前</span>':'<span class="chip c-ok">期間終了</span>')+'<div class="note">'+esc(co.refund)+'</div></td></tr>'}).join('');
   var h=topbar('成約・請求');
   h+='<div class="grid g-kpi">'+kpi('成約',S.PL.length,'件','内定承諾〜入社')+kpi('紹介手数料（税抜）',Math.round(tot),'万円','見込み含む')+kpi('入金済',Math.round(inc),'万円','')+kpi('未回収',Math.round(tot-inc),'万円','請求前・請求済の合計')+'</div>';
-  h+='<div class="card tbl-wrap"><table><thead><tr><th>求職者</th><th>入社企業</th><th>入社日</th><th class="r">理論年収</th><th class="r">料率</th><th class="r">手数料（税抜）</th><th class="r">税込</th><th>請求状況</th><th>返金保証</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  h+='<div class="card tbl-wrap"><table><thead><tr><th>求職者</th><th>入社企業</th><th>入社日</th><th class="r">理論年収</th><th class="r">料率</th><th class="r">手数料（税抜）</th><th class="r">税込</th><th class="r">紹介料</th><th>請求状況</th><th>返金保証</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   h+='<p class="note">選考ボードで「承諾」にすると自動でここに追加されます。本格版では請求書PDFの発行、入金消込、返金発生時の自動計算に対応します。</p>';
   return h;
 };
 function setPL(app,k,v){var p=S.PL.find(function(x){return x.app===app});p[k]=v;save();render();toast('更新しました')}
+
+/* 紹介者・紹介料 */
+function refChain(c){if(!c.ref||!c.ref.chain.length)return '<span class="chip c-warn">未設定</span>';return c.ref.chain.map(function(w,i){var r=RFo(w.r);return '<span class="chip'+(i===0?' c-acc':'')+'">窓口'+(i+1)+' '+esc(r?r.name:'?')+' '+w.share+'%</span>'}).join(' ← ')+'<div class="note">窓口1＝求職者に一番近い紹介者。紹介料＝紹介手数料の'+c.ref.pool+'%</div>'}
+function refModal(cid){var c=C(cid),ch=(c.ref&&c.ref.chain)||[],opts=function(sel){return '<option value="">（なし）</option>'+S.RF.map(function(r){return '<option value="'+r.id+'"'+(r.id===sel?' selected':'')+'>'+esc(r.name)+'</option>'}).join('')};
+  var rows='';for(var i=0;i<5;i++){var w=ch.at(i)||{};rows+='<div class="f2" style="grid-template-columns:70px 1fr 110px;align-items:end"><span class="note" style="padding-bottom:8px">窓口'+(i+1)+(i===0?'<br>（一番近い）':'')+'</span><label>紹介者<select id="rf_r'+i+'">'+opts(w.r)+'</select></label><label>割合（%）<input type="number" id="rf_s'+i+'" min="0" max="100" value="'+(w.share||'')+'"></label></div>'}
+  modal('<h2>紹介者を設定（'+esc(c.name)+'）</h2><p class="note" style="margin:0">紹介の連鎖を、求職者に近い順に窓口1から入れてください（最大5窓口）。成約すると「紹介手数料 × 紹介料率」を割合で分け、返金保証期間が過ぎたら支払えるようになります。</p><div class="form"><label>紹介料率（紹介手数料に対する%）<input type="number" id="rf_pool" min="0" max="100" value="'+((c.ref&&c.ref.pool)||15)+'"></label>'+rows+'<div><button class="btn sm" onclick="fillShares()">入れた窓口数で標準の割合にする</button></div><p class="note" id="rf_err"></p></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveRef(\''+cid+'\')">保存</button></div>')}
+function fillShares(){var n=0;for(var i=0;i<5;i++)if(val('rf_r'+i))n=i+1;var d=defShares(n);for(var k=0;k<5;k++)document.getElementById('rf_s'+k).value=k<n?d.at(k):''}
+function saveRef(cid){var ch=[],gap=false,seen={},err='';for(var i=0;i<5;i++){var r=val('rf_r'+i),sh=+val('rf_s'+i)||0;if(!r){gap=true;continue}if(gap)err='窓口は1から順に、空きを作らずに入れてください';if(seen[r])err='同じ紹介者が2つの窓口に入っています';seen[r]=1;ch.push({r:r,share:sh})}
+  var sum=ch.reduce(function(a,w){return a+w.share},0);if(!ch.length)err='窓口1の紹介者を選んでください';else if(!err&&sum!==100)err='割合の合計を100%にしてください（今は'+sum+'%）';
+  if(err){document.getElementById('rf_err').textContent=err;return}var c=C(cid);c.source='ref';c.ref={pool:+val('rf_pool')||0,chain:ch};log(cid,'紹介者を設定：'+ch.map(function(w,i){return '窓口'+(i+1)+' '+RFo(w.r).name+' '+w.share+'%'}).join(' ← '));save();closeM();render();toast('紹介者を設定しました')}
+V.refs=function(){
+  var tab=S.rt||'list',L=payLines();
+  var sum=function(st){return L.filter(function(l){return st.indexOf(l.st)>=0}).reduce(function(a,l){return a+l.amt},0)};
+  var h=topbar('紹介者・紹介料','<button class="btn" onclick="newRef()">＋ 紹介者を追加</button>');
+  h+='<div class="grid g-kpi">'+kpi('支払待ち',f1m(sum(['支払待ち'])),'万円',L.filter(function(l){return l.st==='支払待ち'}).length+'件・返金保証期間が終了')+kpi('保証期間中・入社前',f1m(sum(['保証期間中','入社前'])),'万円','期間が過ぎると支払待ちに')+kpi('支払済',f1m(sum(['支払済','回収が必要'])),'万円','これまでの合計')+kpi('回収が必要',L.filter(function(l){return l.st==='回収が必要'}).length,'件','支払後に返金が発生')+'</div>';
+  h+='<div class="tabs">'+[['list','紹介者別の実績'],['pay','紹介料の支払い']].map(function(t){return '<button class="'+(tab===t[0]?'on':'')+'" onclick="S.rt=\''+t[0]+'\';render()">'+t[1]+'</button>'}).join('')+'</div>';
+  if(tab==='list'){
+    var rows=S.RF.map(function(r){var direct=S.C.filter(function(c){return c.ref&&c.ref.chain.length&&c.ref.chain[0].r===r.id}),inv=S.C.filter(function(c){return c.ref&&c.ref.chain.some(function(w){return w.r===r.id})}),f=fstats(direct),ids=direct.map(function(c){return c.id});
+      var sales=S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0&&p.inv!=='返金対応'}).reduce(function(a,p){return a+fee(p)},0);
+      var cost=L.filter(function(l){return ids.indexOf(l.c.id)>=0&&l.st!=='取消'}).reduce(function(a,l){return a+l.amt},0);
+      var mine=L.filter(function(l){return l.r===r.id}),paid=mine.filter(function(l){return l.st==='支払済'||l.st==='回収が必要'}).reduce(function(a,l){return a+l.amt},0),unpaid=mine.filter(function(l){return ['支払待ち','保証期間中','入社前'].indexOf(l.st)>=0}).reduce(function(a,l){return a+l.amt},0);
+      return {r:r,f:f,inv:inv.length,sales:sales,cost:cost,paid:paid,unpaid:unpaid,rt:f.all?f.dc/f.all:0}}).sort(function(a,b){return b.rt-a.rt||b.f.dc-a.f.dc});
+    h+='<p class="note" style="margin:0">決定率は、その人が窓口1（求職者に一番近い紹介者）として紹介した人数で数えます。「関わった人数」は窓口2〜5も含めた数です。差し引き＝紹介した人の売上 − その人たちに払う紹介料（全窓口分）。</p>';
+    h+='<div class="card tbl-wrap"><table><thead><tr><th>紹介者</th><th class="r">紹介した人数</th><th class="r">関わった人数</th><th class="r">面談実施</th><th class="r">決定</th><th class="r">決定率</th><th class="r">売上</th><th class="r">差し引き</th><th class="r">紹介料 支払済</th><th class="r">未払い</th></tr></thead><tbody>'+rows.map(function(x){return '<tr><td><b>'+esc(x.r.name)+'</b><div class="note">'+esc(x.r.kind)+' ・ '+esc(x.r.contact)+'</div></td><td class="r num">'+x.f.all+'</td><td class="r num">'+x.inv+'</td><td class="r num">'+x.f.met+'</td><td class="r num">'+x.f.dc+'</td><td class="r num"><b>'+rate(x.f.dc,x.f.all)+'</b></td><td class="r num">'+f1m(x.sales)+'万</td><td class="r num">'+f1m(x.sales-x.cost)+'万</td><td class="r num">'+f1m(x.paid)+'万</td><td class="r num">'+f1m(x.unpaid)+'万</td></tr>'}).join('')+'</tbody></table></div>';
+  }else{
+    L.sort(function(a,b){return PAYORDER.indexOf(a.st)-PAYORDER.indexOf(b.st)||(a.due<b.due?-1:1)});
+    var chip={'支払待ち':'c-danger','回収が必要':'c-warn','保証期間中':'c-info','入社前':'','支払済':'c-ok','取消':''};
+    var waiting=L.filter(function(l){return l.st==='支払待ち'});
+    h+='<div class="filters"><button class="btn pri" onclick="payAll()"'+(waiting.length?'':' disabled')+'>支払待ち '+waiting.length+'件をすべて支払済にする</button><span class="note">支払えるのは、入社日から返金保証期間（企業との契約で決めた期間）が過ぎた分だけです</span></div>';
+    h+='<div class="card tbl-wrap"><table><thead><tr><th>状態</th><th>支払える日</th><th>紹介者</th><th>窓口</th><th>求職者 → 入社企業</th><th class="r">紹介手数料</th><th class="r">配分</th><th class="r">紹介料</th><th></th></tr></thead><tbody>'+L.map(function(l){var r=RFo(l.r),co=CO(J(AP(l.p.app).j).co);return '<tr><td><span class="chip '+chip[l.st]+'">'+l.st+'</span></td><td class="num" style="white-space:nowrap">'+(l.st==='取消'?'—':fd(l.due)+' 以降')+(l.paid?'<div class="note">支払日 '+fd(l.paid)+'</div>':'')+'</td><td>'+esc(r?r.name:'?')+'</td><td class="num" style="white-space:nowrap">'+(l.i+1)+' / '+l.n+'</td><td>'+esc(l.c.name)+'<div class="note">'+esc(co.name)+' ・ 入社 '+fd(l.p.join)+'</div></td><td class="r num">'+yen(fee(l.p))+'</td><td class="r num" style="white-space:nowrap">'+l.pool+'% × '+l.share+'%</td><td class="r num"><b>'+yen(l.amt)+'</b></td><td>'+(l.st==='支払待ち'?'<button class="btn sm" onclick="payOne(\''+l.p.app+'\','+l.i+')">支払済にする</button>':l.st==='回収が必要'?'<span class="note">返金が発生。回収か次回の支払いから差し引き</span>':l.st==='取消'?'<span class="note">返金のため支払わない</span>':'')+'</td></tr>'}).join('')+'</tbody></table></div>';
+    var csv=[['紹介者','振込先','インボイス番号','金額(円)']].concat(waiting.map(function(l){var r=RFo(l.r);return [r.name,r.bank,r.invoice||'未登録',Math.round(l.amt*10000)]}));
+    h+='<section class="card pad"><div class="sec-h"><h2>振込データ（支払待ち）</h2><span>銀行への振込の準備に使えます</span></div><textarea class="csv" id="csv" readonly aria-label="振込データ">'+esc(csv.map(function(r){return r.join(',')}).join('\n'))+'</textarea><div style="margin-top:8px"><button class="btn" onclick="copyCsv()">コピー</button></div><p class="note">本格版では支払明細書のPDFと、銀行の振込用データ（全銀形式）を出力します。源泉徴収・消費税の扱いは税理士の確認後に計算へ反映します。</p></section>';
+  }
+  return h;
+};
+function f1m(n){return (Math.round(n*10)/10).toLocaleString()}
+function payOne(app,i){var p=S.PL.find(function(x){return x.app===app});p.pay=p.pay||{};p.pay[String(i)]=day(0);var c=C(AP(app).c),w=c.ref.chain.at(i);log(c.id,'紹介料を支払済にした：窓口'+(i+1)+' '+RFo(w.r).name);save();render();toast('支払済にしました')}
+function payAll(){var ls=payLines().filter(function(l){return l.st==='支払待ち'});ls.forEach(function(l){l.p.pay[String(l.i)]=day(0)});save();render();toast(ls.length+'件を支払済にしました')}
+function newRef(){modal('<h2>紹介者を追加</h2><div class="form"><div class="f2"><label>名前<input type="text" id="nr_name" placeholder="例：福岡 一郎"></label><label>種別<select id="nr_kind"><option>個人</option><option>提携企業</option><option>団体</option></select></label></div><label>連絡先・メモ<input type="text" id="nr_contact"></label><label>振込先<input type="text" id="nr_bank" placeholder="例：福岡銀行 天神支店 普通 1234567"></label><label>インボイス番号（あれば）<input type="text" id="nr_inv" placeholder="T＋13桁"></label></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveNewRef()">追加</button></div>')}
+function saveNewRef(){var n=val('nr_name').trim();if(!n){toast('名前を入力してください');return}S.RF.push({id:uid('r'),name:n,kind:val('nr_kind'),contact:val('nr_contact'),bank:val('nr_bank'),invoice:val('nr_inv')});save();closeM();render();toast('紹介者を追加しました')}
 
 /* 帳簿・レポート */
 V.books=function(){
@@ -668,6 +738,7 @@ V.books=function(){
   var h=topbar('帳簿・レポート');
   h+='<p class="note" style="margin:0">有料職業紹介事業で備え付けが必要な帳簿を、日々の入力から自動で作成します（項目はサンプル。正式な記載事項は導入時に確認）。</p>';
   h+='<div class="tabs">'+[['src','流入経路別'],['staff','担当者別'],['cand','求職管理簿'],['job','求人管理簿'],['fee','手数料管理簿']].map(function(t){return '<button class="'+(tab===t[0]?'on':'')+'" onclick="S.bt=\''+t[0]+'\';render()">'+t[1]+'</button>'}).join('')+'</div>';
+  if(tab==='src'||tab==='staff')h+='<div class="filters"><span class="note">受付日で絞り込み：</span><select id="rp" aria-label="期間" onchange="S.rp=this.value;render()">'+[['0','全期間'],['90','直近90日'],['180','直近180日'],['365','直近1年']].map(function(o){return '<option value="'+o[0]+'"'+(String(S.rp||0)===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select><span class="note">その期間に受け付けた求職者のうち、何人が各段階に進んだかを数えます</span></div>';
   var d=book(tab);
   if(tab==='src')h+='<p class="note" style="margin:0">サイトURLの <span class="num">?utm_source=ig</span> などを申し込み時に自動で記録。どのSNS・広告から決定につながったかが分かります。</p>';
   h+='<div class="card tbl-wrap"><table><thead><tr>'+d.head.map(function(x){return '<th>'+esc(x)+'</th>'}).join('')+'</tr></thead><tbody>'+d.rows.map(function(r){return '<tr>'+r.map(function(x){return '<td>'+esc(x)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>';
@@ -675,11 +746,11 @@ V.books=function(){
   return h;
 };
 function book(t){
-  if(t==='src')return {head:['流入経路','相談申し込み','面談実施','推薦','内定','決定','決定率','手数料見込み(万)'],rows:Object.keys(SOURCES).map(function(k){var cs=S.C.filter(function(c){return (c.source||'')===k}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [SOURCES[k],f.all,f.met,f.rec,f.of,f.dc,f.all?Math.round(f.dc/f.all*100)+'%':'—',Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
+  if(t==='src')return {head:['流入経路','相談申し込み','面談実施','推薦','内定','決定','決定率','手数料見込み(万)'],rows:Object.keys(SOURCES).map(function(k){var cs=S.C.filter(function(c){return (c.source||'')===k&&inPeriod(c)}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [SOURCES[k],f.all,f.met,f.rec,f.of,f.dc,f.all?Math.round(f.dc/f.all*100)+'%':'—',Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
   if(t==='cand')return {head:['受付日','氏名','年齢','希望職種','希望勤務地','希望年収(万)','紹介先','紹介日','結果','担当'],rows:S.C.map(function(c){var ap=appsOf(c.id);return [c.created,c.name,c.age,c.wantType,c.area,c.salaryWant||'—',ap.map(function(a){return CO(J(a.j).co).name}).join(' / ')||'—',ap.length?ap[0].hist[0].d:'—',ap.map(function(a){return a.stage}).join(' / ')||cstatus(c),c.owner]})};
   if(t==='job')return {head:['求人者（企業）','求人内容','職種','勤務地','賃金(万)','紹介人数','採用人数','状態'],rows:S.J.map(function(j){var ap=S.AP.filter(function(a){return a.j===j.id});return [CO(j.co).name,j.title,j.type,j.area,j.min+'〜'+j.max,ap.length,ap.filter(function(a){return si(a.stage)>=5}).length,j.open?'募集中':'停止']})};
   if(t==='fee')return {head:['求人者（企業）','就職者','入社日','理論年収(万)','料率','手数料(税抜・円)','請求状況'],rows:S.PL.map(function(p){var a=AP(p.app),j=J(a.j),co=CO(j.co);return [co.name,C(a.c).name,p.join,p.salary,co.fee+'%',Math.round(fee(p)*10000),p.inv]})};
-  return {head:['担当','担当求職者','面談済','推薦','内定','決定','手数料見込み(万)'],rows:STAFF.map(function(s){var cs=S.C.filter(function(c){return c.owner===s}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [s,f.all,f.met,f.rec,f.of,f.dc,Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
+  return {head:['担当','担当求職者','面談実施','推薦','内定','決定','決定率（担当数比）','決定率（面談実施比）','手数料(万)'],rows:STAFF.map(function(s){var cs=S.C.filter(function(c){return c.owner===s&&inPeriod(c)}),f=fstats(cs),ids=cs.map(function(c){return c.id});return [s,f.all,f.met,f.rec,f.of,f.dc,rate(f.dc,f.all),rate(f.dc,f.met),Math.round(S.PL.filter(function(p){return ids.indexOf(AP(p.app).c)>=0}).reduce(function(x,p){return x+fee(p)},0))]})};
 }
 function copyCsv(){var t=document.getElementById('csv');var fb=function(){t.select();toast('選択しました。Ctrl+C（⌘C）でコピーしてください')};try{navigator.clipboard.writeText(t.value).then(function(){toast('コピーしました')},fb)}catch(e){fb()}}
 
@@ -728,7 +799,7 @@ SV.form=function(){
    '<label>連絡の受け取り方<select id="sf_contact"><option>LINE</option><option>電話</option><option>メール</option></select></label>'+
    '<label>面談の希望日時（オンライン or 天神オフィス）<div class="slots">'+sl.map(function(x){var p=x.split(' ');return '<button type="button" class="slot'+(s.slot===x?' on':'')+'" onclick="S.site.slot=\''+x+'\';keepForm()">'+fd(p[0])+' '+p[1]+'</button>'}).join('')+'</div></label>'+
    '<label>相談したいこと（任意）<textarea id="sf_memo" placeholder="例：未経験から事務職に挑戦したい"></textarea></label>'+
-   '<div class="s-card"><span class="note">このページを開いたURL（デモ用に切り替え）</span><select id="sf_utm" aria-label="流入元" onchange="S.site.utm=this.value;keepForm()">'+Object.keys(SOURCES).map(function(k){return '<option value="'+k+'"'+(k===s.utm?' selected':'')+'>'+(k?'fuccari.net/?utm_source='+k:'fuccari.net/')+'</option>'}).join('')+'</select><span class="note">→ 流入経路「'+esc(SOURCES[s.utm])+'」として自動記録</span></div>'+
+   '<div class="s-card"><span class="note">このページを開いたURL（デモ用に切り替え）</span><select id="sf_utm" aria-label="流入元" onchange="S.site.utm=this.value;keepForm()">'+Object.keys(SOURCES).filter(function(k){return k!=='ref'}).map(function(k){return '<option value="'+k+'"'+(k===s.utm?' selected':'')+'>'+(k?'fuccari.net/?utm_source='+k:'fuccari.net/')+'</option>'}).join('')+'</select><span class="note">→ 流入経路「'+esc(SOURCES[s.utm])+'」として自動記録</span></div>'+
    '<label style="flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:400"><input type="checkbox" id="sf_ok"> 利用規約・個人情報の取り扱いに同意する</label>'+
    '<button class="s-btn" onclick="submitSite()">この内容で申し込む</button></div></div>';
 };
@@ -778,8 +849,8 @@ function bookMy(cid){var sl=freeSlots();modal('<h2>面談日時を予約</h2><di
 function doBook(cid,x){var c=C(cid),p=x.split(' ');S.MTG.push({id:uid('m'),c:cid,d:p[0],t:p[1],owner:c.owner,how:'オンライン（Zoom）',kind:'初回面談'});c.status='面談予約済';c.next={t:'面談前に'+c.contact+'で挨拶・持ち物の案内',d:day(0)};log(cid,'マイページで面談を予約：'+fd(p[0])+' '+p[1],'本人（マイページ）');ev('in',c.name+'さんが面談を予約（'+fd(p[0])+' '+p[1]+'）→ 担当 '+c.owner+' の予定に追加',cid);S.site.flash=true;save();closeM();render();toast('予約しました')}
 
 /* 問い合わせ登録（電話など、サイト以外の受付） */
-function newCand(){modal('<h2>問い合わせを登録</h2><p class="note" style="margin:0">電話・紹介などサイト以外の受付用です。サイトからの申し込みは自動で登録されます。</p><div class="form"><div class="f2"><label>氏名<input type="text" id="n_name" placeholder="例：福岡 太郎"></label><label>ふりがな<input type="text" id="n_kana"></label><label>年齢<input type="number" id="n_age" value="25"></label></div><div class="f2"><label>電話<input type="tel" id="n_tel"></label><label>メール<input type="email" id="n_mail"></label></div><div class="f2"><label>希望職種<select id="n_type">'+JOBTYPES.map(function(t){return '<option>'+t+'</option>'}).join('')+'</select></label><label>流入経路<select id="n_src"><option value="">直接・その他</option><option value="ig">Instagram</option><option value="line">LINE</option><option value="tiktok">TikTok</option><option value="google">Google検索</option></select></label><label>担当<select id="n_own">'+STAFF.map(function(s){return '<option'+(s===S.me?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></label></div><label>問い合わせ内容<textarea id="n_memo" placeholder="例：営業職への転職を考えています"></textarea></label></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveCand()">登録して初回連絡をタスク化</button></div>')}
-function saveCand(){var n=val('n_name').trim();if(!n){toast('氏名を入力してください');return}var c={id:uid('c'),name:n,kana:val('n_kana'),age:+val('n_age'),phone:val('n_tel'),email:val('n_mail'),current:'（未ヒアリング）',wantType:val('n_type'),area:'天神・博多',salaryNow:0,salaryWant:0,skills:[],owner:val('n_own'),source:val('n_src'),created:day(0),status:'新規問い合わせ',contact:'電話',next:{t:'初回連絡（電話）',d:day(0)},hearing:{},practice:[],docs:{resume:'',cv:''},shareQ:{}};S.C.push(c);log(c.id,'問い合わせ受付'+(val('n_memo')?'：'+val('n_memo'):''));save();closeM();openC(c.id);toast('登録しました。今日やることに「初回連絡」を追加しました')}
+function newCand(){modal('<h2>問い合わせを登録</h2><p class="note" style="margin:0">電話・紹介などサイト以外の受付用です。サイトからの申し込みは自動で登録されます。</p><div class="form"><div class="f2"><label>氏名<input type="text" id="n_name" placeholder="例：福岡 太郎"></label><label>ふりがな<input type="text" id="n_kana"></label><label>年齢<input type="number" id="n_age" value="25"></label></div><div class="f2"><label>電話<input type="tel" id="n_tel"></label><label>メール<input type="email" id="n_mail"></label></div><div class="f2"><label>希望職種<select id="n_type">'+JOBTYPES.map(function(t){return '<option>'+t+'</option>'}).join('')+'</select></label><label>流入経路<select id="n_src"><option value="">直接・その他</option><option value="ig">Instagram</option><option value="line">LINE</option><option value="tiktok">TikTok</option><option value="google">Google検索</option><option value="ref">紹介者</option></select></label><label>担当<select id="n_own">'+STAFF.map(function(s){return '<option'+(s===S.me?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></label></div><label>問い合わせ内容<textarea id="n_memo" placeholder="例：営業職への転職を考えています"></textarea></label></div><div class="acts"><button class="btn" onclick="closeM()">キャンセル</button><button class="btn pri" onclick="saveCand()">登録して初回連絡をタスク化</button></div>')}
+function saveCand(){var n=val('n_name').trim();if(!n){toast('氏名を入力してください');return}var c={id:uid('c'),name:n,kana:val('n_kana'),age:+val('n_age'),phone:val('n_tel'),email:val('n_mail'),current:'（未ヒアリング）',wantType:val('n_type'),area:'天神・博多',salaryNow:0,salaryWant:0,skills:[],owner:val('n_own'),source:val('n_src'),created:day(0),status:'新規問い合わせ',contact:'電話',next:{t:'初回連絡（電話）',d:day(0)},hearing:{},practice:[],docs:{resume:'',cv:''},shareQ:{}};S.C.push(c);log(c.id,'問い合わせ受付'+(val('n_memo')?'：'+val('n_memo'):''));save();closeM();openC(c.id);if(c.source==='ref'){c.ref={pool:15,chain:[]};refModal(c.id)}toast('登録しました。今日やることに「初回連絡」を追加しました')}
 
 /* 共通UI */
 function val(id){var e=document.getElementById(id);return e?e.value:''}
