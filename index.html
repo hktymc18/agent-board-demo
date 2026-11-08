@@ -185,6 +185,10 @@ td.r,th.r{text-align:right}
 .stage-row .sub{font-size:12px;color:var(--muted)}
 .cmp-h{font-size:16px;margin:26px 0 10px;color:var(--ink)}
 .cmp-lead{font-size:14px;color:var(--muted);margin-bottom:10px}
+.basis summary{cursor:pointer;font-weight:700;font-family:var(--f-display);letter-spacing:.04em}
+.basis summary::marker{color:var(--brand)}
+.basis h4{font-family:var(--f-display);font-size:15px;margin:18px 0 6px;color:var(--ink)}
+.basis .note{margin-bottom:8px}
 /* プラン */
 .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
 .plan{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0;border:2px solid transparent}
@@ -416,7 +420,7 @@ td.r,th.r{text-align:right}
     </tbody></table></div>
     <p class="note" style="margin-top:8px">PORTERSの料金は同社の製品資料（2026年11月時点）の掲載額をもとにした概算で、導入コンサルティング費用は含みません。税別。</p>
     <h3 class="cmp-h">自社専用のシステムを開発会社に頼んだ場合との比較</h3>
-    <p class="cmp-lead">同じ規模のシステム（スタンダードプランの内容）を一から開発すると、約11人月（2〜3人のチームで4〜6か月）の作業量です。</p>
+    <p class="cmp-lead">同じ規模のシステム（スタンダードプランの内容）を一から開発すると、約11〜12人月（2〜3人のチームで4〜6か月）の作業量です。</p>
     <div class="card tbl-wrap"><table class="cmp"><thead><tr><th>依頼先</th><th class="num">1人月の単価</th><th class="num">開発費</th><th class="num">保守（年）</th><th>期間の目安</th></tr></thead><tbody>
       <tr><td>大手のシステム会社</td><td class="num">120万〜150万円以上</td><td class="num">1,300万〜2,000万円</td><td class="num">130万〜300万円</td><td>4〜6か月</td></tr>
       <tr><td>中小の受託開発会社</td><td class="num">80万〜120万円</td><td class="num">900万〜1,500万円</td><td class="num">90万〜220万円</td><td>4〜6か月</td></tr>
@@ -424,6 +428,30 @@ td.r,th.r{text-align:right}
       <tr class="ours"><td>AgentBoard スタンダード</td><td class="num">—</td><td class="num">300万円</td><td class="num">36万円（2年目以降）</td><td>第1段階 約6〜8週間</td></tr>
     </tbody></table></div>
     <p class="note" style="margin-top:8px">開発費・保守は一般的な受託開発の相場をもとにした当社試算です（保守は開発費の年10〜15%）。AgentBoardは、すでにある仕組みをもとに御社向けに仕上げるため、一から作る場合の4分の1前後の費用で導入できます。税別。</p>
+    <details class="panel basis" style="margin-top:14px">
+      <summary>補足：開発費の積算根拠を見る</summary>
+      <h4>1. 作業量：約11〜12人月（約245人日）</h4>
+      <p class="note">このシステムを画面に直すと約40画面分です。受託開発では「1画面あたり、設計からテストまで3〜5人日」が一般的な目安で、40画面×4人日＝約160人日。これに画面以外の作業が加わります（1人月＝20人日で換算）。</p>
+      <div class="tbl-wrap"><table class="cmp"><thead><tr><th>作業</th><th class="num">人日</th><th>中身</th></tr></thead><tbody><tr><td>要件定義・打ち合わせ</td><td class="num">20</td><td>業務のヒアリング、仕様書づくり、確認の打ち合わせ</td></tr><tr><td>デザイン</td><td class="num">10</td><td>管理画面と求職者側の2系統。今のサイトの見た目に合わせる</td></tr><tr><td>社内の管理画面</td><td class="num">40</td><td>ホーム、求職者の一覧と詳細（タブ7つ）、選考ボード、求人、企業・契約、面接対策など約20画面。入力チェック、検索、並び替え、スマホ対応</td></tr><tr><td>求職者側</td><td class="num">20</td><td>相談フォーム、面談予約（空き枠の管理）、マイページ。外部の方が使うため、使いやすさと不正利用への対策が必要</td></tr><tr><td>LINE連携</td><td class="num">15</td><td>LINE公式アカウントとの接続、友だち追加からの自動登録、通知の送信と検証</td></tr><tr><td>成約・請求・帳簿・レポート</td><td class="num">20</td><td>手数料の計算、返金期限、法定帳簿3種、担当者別・流入経路別の集計</td></tr><tr><td>紹介者・紹介料の管理</td><td class="num">15</td><td>5窓口の配分、保証期間の判定、返金時の取消・回収、支払い処理、振込データ。お金の計算のため検証を厚くする</td></tr><tr><td>AI機能</td><td class="num">20</td><td>書類の下書き、求人票の取り込み、想定質問。指示の調整、誤りの検証、停止時の対処、利用料の管理</td></tr><tr><td>ログイン・権限・セキュリティ</td><td class="num">10</td><td>二段階認証、見られる範囲の設定、操作の記録、データの暗号化</td></tr><tr><td>Excelからのデータ移行</td><td class="num">5</td><td>表記ゆれの整理、重複の統合、取り込み後の照合</td></tr><tr><td>テスト・受け入れ・リリース</td><td class="num">20</td><td>パソコン・スマホでの動作確認、不具合の修正、お客様の確認、本番の準備</td></tr><tr><td>進行管理</td><td class="num">30</td><td>全体の約15%。予定の管理、報告、仕様変更の調整</td></tr><tr class="ours"><td>合計</td><td class="num">245</td><td>約11〜12人月</td></tr></tbody></table></div>
+      <h4>2. 単価：1人月80万〜120万円の内訳</h4>
+      <div class="tbl-wrap"><table class="cmp"><thead><tr><th>内訳</th><th class="num">1人月あたり</th></tr></thead><tbody>
+        <tr><td>エンジニアの給料</td><td class="num">40万〜60万円</td></tr>
+        <tr><td>社会保険・福利厚生（給料の約3割）</td><td class="num">12万〜18万円</td></tr>
+        <tr><td>間接費（営業、管理部門、オフィス、教育、案件のない期間の人件費）</td><td class="num">15万〜25万円</td></tr>
+        <tr><td>利益</td><td class="num">10万〜20万円</td></tr>
+        <tr class="ours"><td>合計</td><td class="num">約80万〜120万円</td></tr>
+      </tbody></table></div>
+      <p class="note">大手は元請けから下請けへと何層にも仕事が流れ、それぞれで利益が乗るため高くなります。また、完成まで責任を負う契約では、見積もりの外れや仕様変更に備えて10〜20%の予備が上乗せされるのが一般的です。</p>
+      <h4>3. AgentBoardがこの価格で導入できる理由</h4>
+      <div class="tbl-wrap"><table class="cmp"><thead><tr><th>理由</th><th>減る作業の目安</th></tr></thead><tbody>
+        <tr><td>試作品（POC）がすでにあり、要件の整理・画面構成・デザインの大部分が済んでいる</td><td>要件定義・デザインの約30人日がほぼ不要</td></tr>
+        <tr><td>AIを活用した開発で、実装とテストの速さが2〜3倍</td><td>実装・テストの約150人日が50〜75人日程度に</td></tr>
+        <tr><td>営業・管理部門の間接費が小さい</td><td>単価のうち間接費・利益の部分（1人月あたり25万〜45万円）が大きく下がる</td></tr>
+        <tr><td>作り手と提案者が同じで、伝言や調整の工程が少ない</td><td>進行管理の約30人日の大半が不要</td></tr>
+        <tr><td>共通の仕組みをもとに、御社向けに仕上げる</td><td>一から作る部分が少ない</td></tr>
+      </tbody></table></div>
+      <p class="note">画面数・人日・単価は、一般的な受託開発の相場から計算した当社の目安で、他社の実際の見積もりではありません。</p>
+    </details>
   </div>
 </section>
 
